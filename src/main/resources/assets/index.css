@@ -1,0 +1,372 @@
+/* ====================================================================
+   APLICACIÓN FICHAS TÉCNICAS - ESTILOS PERSONALIZADOS
+   Usando AtlantaFX como base con PrimerDark theme
+   ==================================================================== */
+
+/* ====================================================================
+   CONTENEDORES PRINCIPALES
+   ==================================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+}
+
+.header-container {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 0 1 0;
+}
+
+.top-bar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.view-container {
+    -fx-background-color: -color-bg-default;
+    -fx-min-height: 400px;
+}
+
+/* ====================================================================
+   TÍTULOS Y TEXTOS
+   ==================================================================== */
+
+.app-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.view-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+    -fx-padding: 0 0 5 0;
+}
+
+.view-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-wrap-text: true;
+}
+
+.header-section {
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ====================================================================
+   TABPANE CLASSIC PERSONALIZADO - Estilo llamativo y característico
+   ==================================================================== */
+
+.main-tabpane {
+    -fx-padding: 10 0 0 0;
+    -fx-background-color: transparent;
+}
+
+/* Contenedor base de las tabs */
+.main-tabpane .tab-header-area {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.main-tabpane .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 0 1 0;
+}
+
+.main-tabpane .headers-region {
+    -fx-background-color: transparent;
+}
+
+/* Estilos para cada tab individual */
+.main-tabpane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+    -fx-background-insets: 0;
+}
+
+/* Tab en estado normal (hover) */
+.main-tabpane .tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 6 6 0 0;
+}
+
+/* Tab seleccionada */
+.main-tabpane .tab:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -color-accent-emphasis transparent;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-style: solid;
+}
+
+.main-tabpane .tab:selected:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-background-radius: 6 6 0 0;
+}
+
+/* Etiquetas de texto en las tabs */
+.main-tabpane .tab .tab-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -color-fg-muted;
+    -fx-effect: null;
+}
+
+.main-tabpane .tab:hover .tab-label {
+    -fx-text-fill: -color-fg-default;
+    -fx-font-weight: 600;
+}
+
+.main-tabpane .tab:selected .tab-label {
+    -fx-text-fill: -color-accent-emphasis;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, -color-accent-emphasis, 2, 0, 0, 0);
+}
+
+/* Efecto de transición suave */
+.main-tabpane .tab .tab-label {
+    -fx-transition: -fx-text-fill 0.2s ease-out, -fx-font-weight 0.1s ease-out;
+}
+
+/* Área de contenido de las tabs */
+.main-tabpane .tab-content-area {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Indicador visual adicional para tab activa */
+.main-tabpane .tab:selected::after {
+    -fx-background-color: -color-accent-emphasis;
+}
+
+/* Mejoras adicionales para el contenedor principal */
+.main-tabpane .control-buttons-tab {
+    -fx-background-color: transparent;
+}
+
+/* ====================================================================
+   BOTONES DE ACCIÓN
+   ==================================================================== */
+
+.action-buttons {
+    -fx-padding: 10 0 15 0;
+}
+
+.action-buttons .button {
+    -fx-min-height: 36px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+/* Botón Success (Verde) */
+.button.success {
+    -fx-background-color: -color-success-emphasis;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.button.success:hover {
+    -fx-background-color: derive(-color-success-emphasis, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 2);
+}
+
+.button.success:pressed {
+    -fx-background-color: derive(-color-success-emphasis, -20%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+/* Botón Accent (Azul) */
+.button.accent {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.button.accent:hover {
+    -fx-background-color: derive(-color-accent-emphasis, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 2);
+}
+
+.button.accent:pressed {
+    -fx-background-color: derive(-color-accent-emphasis, -20%);
+}
+
+/* Botón Danger (Rojo) */
+.button.danger {
+    -fx-background-color: -color-danger-emphasis;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.button.danger:hover {
+    -fx-background-color: derive(-color-danger-emphasis, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 2);
+}
+
+.button.danger:pressed {
+    -fx-background-color: derive(-color-danger-emphasis, -20%);
+}
+
+/* Botón Secondary */
+.button.secondary {
+    -fx-background-color: -color-bg-muted;
+    -fx-text-fill: -color-fg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1;
+}
+
+.button.secondary:hover {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+}
+
+.button.secondary:pressed {
+    -fx-background-color: derive(-color-bg-muted, -10%);
+}
+
+/* ====================================================================
+   TABLAS
+   ==================================================================== */
+
+.table-container {
+    -fx-background-color: -color-bg-default;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.data-table {
+    -fx-background-color: -color-bg-default;
+    -fx-background-radius: 8;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 7 7 0 0;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 0 1 0;
+}
+
+.data-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 1 0 0;
+    -fx-font-weight: 600;
+    -fx-text-fill: -color-fg-default;
+    -fx-padding: 12 8 12 8;
+}
+
+.data-table .column-header:last-child {
+    -fx-border-width: 0;
+}
+
+.data-table .table-cell {
+    -fx-padding: 10 8 10 8;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 0 1 0;
+    -fx-text-fill: -color-fg-default;
+    -fx-background-color: transparent;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: transparent;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: -color-bg-subtle;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-fg-default;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: derive(-color-accent-subtle, 50%);
+}
+
+/* ====================================================================
+   BARRA DE ESTADO
+   ==================================================================== */
+
+.status-bar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-padding: 12 15 12 15;
+    -fx-background-radius: 0 0 8 8;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-fg-default;
+    -fx-font-weight: 500;
+}
+
+.status-text-secondary {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.status-text-warning {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-attention-emphasis;
+    -fx-font-weight: 500;
+}
+
+/* ====================================================================
+   EFECTOS Y ANIMACIONES
+   ==================================================================== */
+
+.button:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.data-table .table-row-cell {
+    -fx-transition: -fx-background-color 0.2s ease;
+}
+
+/* ====================================================================
+   RESPONSIVIDAD Y ADAPTABILIDAD
+   ==================================================================== */
+
+@media screen and (max-width: 1024px) {
+    .action-buttons {
+        -fx-spacing: 8;
+    }
+    
+    .action-buttons .button {
+        -fx-min-width: 100px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .view-title {
+        -fx-font-size: 20px;
+    }
+    
+    .app-title {
+        -fx-font-size: 18px;
+    }
+    
+    .main-tabpane .tab {
+        -fx-padding: 6 12 6 12;
+    }
+}

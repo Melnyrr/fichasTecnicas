@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.ui.MainController">
+
+    <top>
+        <VBox spacing="0" styleClass="header-container">
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
+                <padding>
+                    <Insets top="15" right="20" bottom="10" left="20"/>
+                </padding>
+                <Label text="Fichas Técnicas" styleClass="app-title"/>
+            </HBox>
+            
+            <TabPane fx:id="mainTabPane" styleClass="main-tabpane">
+                <padding>
+                    <Insets left="20" right="20"/>
+                </padding>
+                <tabs>
+                    <Tab fx:id="equiposTab" text="Equipos" closable="false"/>
+                    <Tab fx:id="mantenimientosTab" text="Mantenimientos" closable="false"/>
+                    <Tab fx:id="softwareTab" text="Software" closable="false"/>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- El contenido de las tabs se mostrará aquí dinámicamente -->
+    </center>
+
+</BorderPane>
