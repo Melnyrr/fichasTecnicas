@@ -1,39 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.BorderPane?>
+
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
+
 <?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.control.Button?>
+
 <?import javafx.geometry.Insets?>
 
 <BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.ui.MainController">
 
-    <top>
-        <VBox spacing="0" styleClass="header-container">
-            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
-                <padding>
-                    <Insets top="15" right="20" bottom="10" left="20"/>
-                </padding>
-                <Label text="Fichas Técnicas" styleClass="app-title"/>
-            </HBox>
-            
-            <TabPane fx:id="mainTabPane" styleClass="main-tabpane">
-                <padding>
-                    <Insets left="20" right="20"/>
-                </padding>
-                <tabs>
-                    <Tab fx:id="equiposTab" text="Equipos" closable="false"/>
-                    <Tab fx:id="mantenimientosTab" text="Mantenimientos" closable="false"/>
-                    <Tab fx:id="softwareTab" text="Software" closable="false"/>
-                </tabs>
-            </TabPane>
-        </VBox>
-    </top>
+<!-- SIDEBAR LEFT -->
+<left>
+    <VBox fx:id="sidebar" styleClass="sidebar">
 
-    <center>
-        <!-- El contenido de las tabs se mostrará aquí dinámicamente -->
-    </center>
+<!-- Sidebar Header -->
+
+<VBox fx:id="sidebarHeader" styleClass="sidebar-header">
+<padding>
+<Insets top="24" right="20" bottom="20" left="20"/>
+</padding>
+
+<!-- Contenedor HBox: Logo, Nombre de app + subtítulo, y botón de tema -->
+<HBox spacing="12" styleClass="sidebar-header-content" alignment="CENTER_LEFT">
+    <!-- Logo -->
+    <Label text="⚡" styleClass="sidebar-logo-icon"/>
+
+    <!-- Título y subtítulo -->
+    <VBox spacing="2" styleClass="sidebar-title-container">
+        <Label text="Fichas Técnicas" styleClass="sidebar-app-name"/>
+        <Label text="Troquedom SRL" styleClass="sidebar-app-subtitle"/>
+    </VBox>
+
+    <!-- Botón de cambio de tema (push to end) -->
+    <Button 
+        fx:id="themeSwitcherButton" 
+        styleClass="theme-switcher-button"
+        onAction="#toggleTheme"
+        HBox.hgrow="ALWAYS"
+        maxWidth="40"
+        alignment="CENTER_RIGHT"/>
+</HBox>
+
+</VBox>
+
+        <!-- Navigation Section -->
+        <VBox fx:id="navigationSection" styleClass="navigation-section" spacing="2">
+            <!-- Navigation Buttons -->
+            <Button fx:id="equiposNavButton" 
+                    text="Equipos" 
+                    styleClass="nav-button, nav-button-active"
+                    onAction="#navigateToEquipos"
+                    maxWidth="Infinity"
+                    focusTraversable="false"/>
+            
+            <Button fx:id="mantenimientosNavButton" 
+                    text="Mantenimientos" 
+                    styleClass="nav-button"
+                    onAction="#navigateToMantenimientos"
+                    maxWidth="Infinity"
+                    focusTraversable="false"/>
+            
+            <Button fx:id="softwareNavButton" 
+                    text="Software" 
+                    styleClass="nav-button"
+                    onAction="#navigateToSoftware"
+                    maxWidth="Infinity"
+                    focusTraversable="false"/>
+        </VBox>
+    </VBox>
+</left>
+
+<!-- CONTENT AREA -->
+<center>
+    <VBox fx:id="contentArea" styleClass="content-area">
+        <!-- El contenido de las vistas se mostrará aquí dinámicamente -->
+    </VBox>
+</center>
 
 </BorderPane>

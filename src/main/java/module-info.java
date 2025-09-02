@@ -11,7 +11,7 @@ module starter {
     requires org.kordamp.ikonli.materialdesign2;
     
     // --- Exportar y Abrir Paquetes ---
-    // Exporta el paquete principal para que la aplicación pueda ser lanzada
+    // Exporta el paquete principal para que la aplicación pueda  ser lanzada
     exports starter;
 
     // ¡ESTAS SON LAS LÍNEAS QUE FALTABAN!

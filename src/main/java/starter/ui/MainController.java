@@ -2,17 +2,16 @@ package starter.ui;
 
 import java.io.IOException;
 
-import atlantafx.base.theme.Styles;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 /**
  * Controlador para la ventana principal de la aplicación.
- * Gestiona la navegación entre las diferentes vistas usando un TabPane con estilo floating.
+ * Gestiona la navegación entre las diferentes vistas usando un sidebar lateral.
  */
 public class MainController {
 
@@ -20,105 +19,225 @@ public class MainController {
     private BorderPane rootPane;
 
     @FXML
-    private TabPane mainTabPane;
+    private VBox sidebar;
 
     @FXML
-    private Tab equiposTab;
+    private VBox contentArea;
 
     @FXML
-    private Tab mantenimientosTab;
+    private Button equiposNavButton;
 
     @FXML
-    private Tab softwareTab;
+    private Button mantenimientosNavButton;
+
+    @FXML
+    private Button softwareNavButton;
+
+    @FXML
+    private Button themeSwitcherButton;
+
+    private Button currentActiveButton;
+    private boolean isDarkTheme = true; // PrimerDark por defecto
 
     /**
      * El método initialize se ejecuta automáticamente después de cargar el FXML.
      */
     @FXML
     private void initialize() {
-        // Configurar el estilo classic para el TabPane
-        mainTabPane.getStyleClass().add(Styles.TABS_CLASSIC);
-        mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        // Configurar el sidebar
+        setupSidebar();
         
-        // Cargar el contenido inicial de cada tab
-        loadTabContent(equiposTab, "/fxml/EquiposView.fxml");
-        loadTabContent(mantenimientosTab, "/fxml/MantenimientosView.fxml");
-        loadTabContent(softwareTab, "/fxml/SoftwareView.fxml");
+        // Cargar la vista por defecto (Equipos)
+        navigateToEquipos();
+        currentActiveButton = equiposNavButton;
         
-        // Seleccionar la primera tab por defecto
-        mainTabPane.getSelectionModel().select(equiposTab);
-        
-        // Listener para cambios de tab (opcional, para lógica adicional)
-        mainTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if (newTab != null) {
-                System.out.println("Cambiando a tab: " + newTab.getText());
-                // Aquí puedes agregar lógica adicional cuando se cambie de tab
-            }
-        });
+        // Configurar el theme switcher
+        updateThemeSwitcherIcon();
     }
 
     /**
-     * Carga un archivo FXML en una tab específica.
-     * @param tab La tab donde cargar el contenido.
+     * Configura los estilos y comportamiento del sidebar.
+     */
+    private void setupSidebar() {
+        // Configurar ancho fijo del sidebar
+        sidebar.setPrefWidth(250);
+        sidebar.setMinWidth(250);
+        sidebar.setMaxWidth(250);
+    }
+
+    /**
+     * Navega a la vista de Equipos.
+     */
+    @FXML
+    public void navigateToEquipos() {
+        loadView("/fxml/EquiposView.fxml");
+        setActiveButton(equiposNavButton);
+        System.out.println("Navegando a: Equipos");
+    }
+
+    /**
+     * Navega a la vista de Mantenimientos.
+     */
+    @FXML
+    public void navigateToMantenimientos() {
+        loadView("/fxml/MantenimientosView.fxml");
+        setActiveButton(mantenimientosNavButton);
+        System.out.println("Navegando a: Mantenimientos");
+    }
+
+    /**
+     * Navega a la vista de Software.
+     */
+    @FXML
+    public void navigateToSoftware() {
+        loadView("/fxml/SoftwareView.fxml");
+        setActiveButton(softwareNavButton);
+        System.out.println("Navegando a: Software");
+    }
+
+    /**
+     * Carga una vista FXML en el área de contenido.
      * @param fxmlPath La ruta del archivo FXML a cargar.
      */
-    private void loadTabContent(Tab tab, String fxmlPath) {
+    private void loadView(String fxmlPath) {
         try {
             Parent view = FXMLLoader.load(getClass().getResource(fxmlPath));
-            tab.setContent(view);
+            
+            // Limpiar el contenido anterior
+            contentArea.getChildren().clear();
+            
+            // Agregar la nueva vista
+            contentArea.getChildren().add(view);
+            
         } catch (IOException e) {
             System.err.println("Error al cargar la vista FXML: " + fxmlPath);
             e.printStackTrace();
             
             // Mostrar un mensaje de error en lugar de la vista
-            showErrorInTab(tab, "No se pudo cargar la vista: " + fxmlPath);
+            showError("No se pudo cargar la vista: " + fxmlPath);
         }
     }
 
     /**
-     * Muestra un mensaje de error en una tab cuando no se puede cargar su contenido.
+     * Establece qué botón de navegación está activo.
+     * @param activeButton El botón que debe marcarse como activo.
      */
-    private void showErrorInTab(Tab tab, String errorMessage) {
+    private void setActiveButton(Button activeButton) {
+        // Remover la clase activa de todos los botones
+        equiposNavButton.getStyleClass().removeAll("nav-button-active");
+        mantenimientosNavButton.getStyleClass().removeAll("nav-button-active");
+        softwareNavButton.getStyleClass().removeAll("nav-button-active");
+        
+        // Agregar la clase activa al botón seleccionado
+        if (!activeButton.getStyleClass().contains("nav-button-active")) {
+            activeButton.getStyleClass().add("nav-button-active");
+        }
+        
+        currentActiveButton = activeButton;
+        
+        // Forzar actualización visual
+        activeButton.pseudoClassStateChanged(
+            javafx.css.PseudoClass.getPseudoClass("selected"), true
+        );
+    }
+
+    /**
+     * Alterna entre tema claro y oscuro.
+     */
+    @FXML
+    public void toggleTheme() {
+        try {
+            if (isDarkTheme) {
+                // Cambiar a tema claro
+                javafx.application.Application.setUserAgentStylesheet(
+                    new atlantafx.base.theme.PrimerLight().getUserAgentStylesheet()
+                );
+                isDarkTheme = false;
+            } else {
+                // Cambiar a tema oscuro
+                javafx.application.Application.setUserAgentStylesheet(
+                    new atlantafx.base.theme.PrimerDark().getUserAgentStylesheet()
+                );
+                isDarkTheme = true;
+            }
+            updateThemeSwitcherIcon();
+            System.out.println("Tema cambiado a: " + (isDarkTheme ? "Oscuro" : "Claro"));
+        } catch (Exception e) {
+            System.err.println("Error al cambiar el tema: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Actualiza el ícono del botón de cambio de tema.
+     */
+    private void updateThemeSwitcherIcon() {
+        if (themeSwitcherButton != null) {
+            themeSwitcherButton.setText(isDarkTheme ? "🔆" : "🌙");
+        }
+    }
+
+    /**
+     * Muestra un mensaje de error en el área de contenido.
+     * @param errorMessage El mensaje de error a mostrar.
+     */
+    private void showError(String errorMessage) {
         try {
             javafx.scene.control.Label errorLabel = new javafx.scene.control.Label(errorMessage);
-            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20px;");
-            tab.setContent(errorLabel);
+            errorLabel.setStyle("-fx-text-fill: -color-danger-emphasis; -fx-font-size: 14px; -fx-padding: 20px; -fx-alignment: center;");
+            
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(errorLabel);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // Métodos públicos para navegación programática (opcional)
-    
-    public void navigateToEquipos() {
-        mainTabPane.getSelectionModel().select(equiposTab);
-    }
-
-    public void navigateToMantenimientos() {
-        mainTabPane.getSelectionModel().select(mantenimientosTab);
-    }
-
-    public void navigateToSoftware() {
-        mainTabPane.getSelectionModel().select(softwareTab);
+    /**
+     * Recarga la vista actualmente seleccionada.
+     */
+    public void reloadCurrentView() {
+        if (currentActiveButton == equiposNavButton) {
+            navigateToEquipos();
+        } else if (currentActiveButton == mantenimientosNavButton) {
+            navigateToMantenimientos();
+        } else if (currentActiveButton == softwareNavButton) {
+            navigateToSoftware();
+        }
     }
 
     /**
-     * Recargar el contenido de una tab específica.
-     * @param tabName Nombre de la tab ("equipos", "mantenimientos", "software")
+     * Recargar una vista específica por nombre.
+     * @param viewName Nombre de la vista ("equipos", "mantenimientos", "software")
      */
-    public void reloadTab(String tabName) {
-        switch (tabName.toLowerCase()) {
+    public void reloadView(String viewName) {
+        switch (viewName.toLowerCase()) {
             case "equipos":
-                loadTabContent(equiposTab, "/fxml/EquiposView.fxml");
+                navigateToEquipos();
                 break;
             case "mantenimientos":
-                loadTabContent(mantenimientosTab, "/fxml/MantenimientosView.fxml");
+                navigateToMantenimientos();
                 break;
             case "software":
-                loadTabContent(softwareTab, "/fxml/SoftwareView.fxml");
+                navigateToSoftware();
                 break;
             default:
-                System.err.println("Tab desconocida: " + tabName);
+                System.err.println("Vista desconocida: " + viewName);
         }
+    }
+
+    /**
+     * Obtiene el botón de navegación actualmente seleccionado.
+     * @return El botón activo actual.
+     */
+    public Button getCurrentActiveButton() {
+        return currentActiveButton;
+    }
+
+    /**
+     * Obtiene el área de contenido para manipulación externa si es necesario.
+     * @return El VBox del área de contenido.
+     */
+    public VBox getContentArea() {
+        return contentArea;
     }
 }

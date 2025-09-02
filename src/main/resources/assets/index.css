@@ -1,31 +1,28 @@
-/* ====================================================================
-   APLICACIÓN FICHAS TÉCNICAS - ESTILOS PERSONALIZADOS
-   Usando AtlantaFX como base con PrimerDark theme
-   ==================================================================== */
+/*
+ * Copyright (c) 2023.
+ * Este código es un proyecto de práctica y se proporciona con fines educativos únicamente.
+ * No se otorga ninguna garantía de ningún tipo, expresa o implícita, con respecto al uso o la
+ * idoneidad de este código para ningún propósito particular.
+ *
+ * Se concede permiso para usar, copiar, modificar y distribuir este código y su documentación
+ * para cualquier propósito, sin cargo, siempre que se mantenga este aviso de copyright
+ * y la nota de exención de responsabilidad en todas las copias.
+ */
 
 /* ====================================================================
-   CONTENEDORES PRINCIPALES
+   VARIABLES PERSONALIZADAS
    ==================================================================== */
+
+/* Añade esto al inicio de tu archivo index.css */
 
 .root {
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
-    -fx-font-size: 13px;
+    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;;
 }
 
-.header-container {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
-    -fx-border-width: 0 0 1 0;
-}
-
-.top-bar {
-    -fx-background-color: -color-bg-subtle;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
-}
-
-.view-container {
-    -fx-background-color: -color-bg-default;
-    -fx-min-height: 400px;
+/* Opcional: También puedes aplicarlo a los títulos de la vista para una prueba más clara */
+.view-title,
+.view-subtitle {
+    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;;
 }
 
 /* ====================================================================
@@ -55,102 +52,6 @@
     -fx-padding: 0 0 10 0;
     -fx-border-color: -color-border-muted;
     -fx-border-width: 0 0 1 0;
-}
-
-/* ====================================================================
-   TABPANE CLASSIC PERSONALIZADO - Estilo llamativo y característico
-   ==================================================================== */
-
-.main-tabpane {
-    -fx-padding: 10 0 0 0;
-    -fx-background-color: transparent;
-}
-
-/* Contenedor base de las tabs */
-.main-tabpane .tab-header-area {
-    -fx-padding: 0;
-    -fx-background-color: transparent;
-}
-
-.main-tabpane .tab-header-background {
-    -fx-background-color: transparent;
-    -fx-border-color: -color-border-muted;
-    -fx-border-width: 0 0 1 0;
-}
-
-.main-tabpane .headers-region {
-    -fx-background-color: transparent;
-}
-
-/* Estilos para cada tab individual */
-.main-tabpane .tab {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 12 20 12 20;
-    -fx-cursor: hand;
-    -fx-background-insets: 0;
-}
-
-/* Tab en estado normal (hover) */
-.main-tabpane .tab:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-background-radius: 6 6 0 0;
-}
-
-/* Tab seleccionada */
-.main-tabpane .tab:selected {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent transparent -color-accent-emphasis transparent;
-    -fx-border-width: 0 0 3 0;
-    -fx-border-style: solid;
-}
-
-.main-tabpane .tab:selected:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.03);
-    -fx-background-radius: 6 6 0 0;
-}
-
-/* Etiquetas de texto en las tabs */
-.main-tabpane .tab .tab-label {
-    -fx-font-size: 14px;
-    -fx-font-weight: 500;
-    -fx-text-fill: -color-fg-muted;
-    -fx-effect: null;
-}
-
-.main-tabpane .tab:hover .tab-label {
-    -fx-text-fill: -color-fg-default;
-    -fx-font-weight: 600;
-}
-
-.main-tabpane .tab:selected .tab-label {
-    -fx-text-fill: -color-accent-emphasis;
-    -fx-font-weight: 700;
-    -fx-effect: dropshadow(gaussian, -color-accent-emphasis, 2, 0, 0, 0);
-}
-
-/* Efecto de transición suave */
-.main-tabpane .tab .tab-label {
-    -fx-transition: -fx-text-fill 0.2s ease-out, -fx-font-weight 0.1s ease-out;
-}
-
-/* Área de contenido de las tabs */
-.main-tabpane .tab-content-area {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-}
-
-/* Indicador visual adicional para tab activa */
-.main-tabpane .tab:selected::after {
-    -fx-background-color: -color-accent-emphasis;
-}
-
-/* Mejoras adicionales para el contenedor principal */
-.main-tabpane .control-buttons-tab {
-    -fx-background-color: transparent;
 }
 
 /* ====================================================================
@@ -334,39 +235,560 @@
    EFECTOS Y ANIMACIONES
    ==================================================================== */
 
+/* Removido el escalado que causaba problemas de tamaño */
+/* Se mantiene el efecto de sombra para la interacción */
 .button:hover {
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 2);
 }
 
 .data-table .table-row-cell {
     -fx-transition: -fx-background-color 0.2s ease;
 }
 
+
 /* ====================================================================
-   RESPONSIVIDAD Y ADAPTABILIDAD
+   SIDEBAR NAVIGATION - Estilos para barra lateral
    ==================================================================== */
 
-@media screen and (max-width: 1024px) {
-    .action-buttons {
-        -fx-spacing: 8;
+.sidebar {
+    -fx-background-color: derive(-color-bg-default, -8%);
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 3, 0, 2, 0);
+    -fx-min-width: 280px;
+    -fx-max-width: 250px;
+    -fx-pref-width: 250px;
+}
+
+/* ====================================================================
+   SIDEBAR HEADER
+   ==================================================================== */
+
+.sidebar-header {
+    -fx-background-color: derive(-color-bg-default, -3%);
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 0 1 0;
+    -fx-min-height: 90px; /* Ajustado para dispositivos móviles */
+    -fx-padding: 24 20 20 20;
+}
+
+.sidebar-header-content {
+    -fx-alignment: center-left;
+    -fx-spacing: 12;
+    -fx-min-height: 50px;
+}
+
+.sidebar-title-container {
+    -fx-alignment: center-left;
+}
+
+.sidebar-logo-section {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 12;
+    -fx-min-height: 50px;
+}
+
+.sidebar-logo-icon {
+    -fx-font-size: 28px;
+    -fx-text-fill: -color-accent-emphasis;
+    -fx-min-width: 32px;
+}
+
+.sidebar-app-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-fg-default;
+    -fx-wrap-text: false;
+}
+
+.sidebar-app-subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -color-fg-muted;
+    -fx-wrap-text: false;
+}
+
+.sidebar-actions {
+    -fx-alignment: CENTER;
+    -fx-min-height: 40px;
+}
+
+/* Theme Switcher Button */
+.theme-switcher-button {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-fg-default;
+    -fx-cursor: hand;
+    -fx-min-height: 40px;
+    -fx-min-width: 40px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+    -fx-alignment: center;
+}
+
+.theme-switcher-button:hover {
+    -fx-background-color: -color-bg-muted;
+    /*-fx-border-color: -color-accent-emphasis;*/
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 2, 0, 0, 1);
+}
+
+.theme-switcher-button:pressed {
+    -fx-background-color: derive(-color-bg-muted, -5%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 1, 0, 0, 0);
+}
+
+/* ====================================================================
+   NAVIGATION SECTION
+   ==================================================================== */
+
+.navigation-section {
+    -fx-background-color: transparent;
+    -fx-padding: 15 0 20 0;
+    -fx-spacing: 0; /* Cambio principal: Elimina el espacio entre los botones */
+}
+
+/* ====================================================================
+   BOTONES DE NAVEGACIÓN - CORREGIDOS
+   ==================================================================== */
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border
+    -fx-padding: 18 24 18 24;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -color-fg-default;
+    -fx-cursor: hand;
+    -fx-min-height: 24px;
+    -fx-max-width: Infinity;
+    -fx-background-insets: 0;
+    /* ELIMINAR FOCUS VISUAL PREDETERMINADO */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+.nav-button:hover {
+    -fx-background-color: derive(-color-accent-subtle, 8%);
+    -fx-background-radius: 10;
+}
+
+/* Eliminar todos los estados de focus predeterminados */
+.nav-button:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+/* Estado hover SOLO cuando no está activo */
+.nav-button:hover:not(.nav-button-active) {
+    -fx-background-color: derive(-color-bg-subtle, 8%);
+    -fx-text-fill: -color-accent-emphasis;
+    -fx-font-weight: 600;
+    -fx-background-radius: 5;
+}
+
+/* Estado activo - SIEMPRE VISIBLE */
+.nav-button-active,
+.nav-button-active:focused,
+.nav-button-active:hover,
+.nav-button-active:pressed {
+    -fx-background-color: -color-accent-subtle !important;
+    -fx-text-fill: derive(-color-accent-emphasis, 40%) !important;
+    -fx-font-weight: 700 !important;
+    -fx-border-color: transparent transparent transparent -color-accent-emphasis !important;
+    -fx-border-width: 0 0 0 4 !important;
+    -fx-border-style: solid !important;
+    -fx-background-radius: 5;
+}
+
+/* Hover sobre botón activo - Mantener estilo pero con ligera variación */
+.nav-button-active:hover {
+    -fx-background-color: derive(-color-accent-subtle, 5%) !important;
+}
+
+/* Estado pressed para retroalimentación inmediata */
+.nav-button:pressed:not(.nav-button-active) {
+    -fx-background-color: derive(-color-bg-subtle, 15%);
+    -fx-text-fill: -color-accent-emphasis;
+}
+
+.nav-button-active:pressed {
+    -fx-background-color: derive(-color-accent-subtle, -5%) !important;
+}
+
+/* ====================================================================
+   ÁREA DE CONTENIDO
+   ==================================================================== */
+
+.content-area {
+    -fx-background-color: -color-bg-subtle;
+    -fx-padding: 0;
+}
+
+/* ====================================================================
+   BARRA SUPERIOR ACTUALIZADA
+   ==================================================================== */
+
+.top-bar {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 2, 0, 0, 1);
+}
+
+/* ====================================================================
+   ELIMINACIÓN DE TRANSICIONES PROBLEMÁTICAS
+   ==================================================================== */
+
+/* Remover escalado que causa problemas */
+.nav-button {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+/* Transiciones más simples y confiables */
+.nav-button {
+    -fx-transition:
+        -fx-background-color 0.15s ease-out,
+        -fx-text-fill 0.15s ease-out,
+        -fx-font-weight 0.1s ease-out;
+}
+
+.theme-switcher-button {
+    -fx-transition:
+        -fx-background-color 0.2s ease-out,
+        -fx-border-color 0.2s ease-out;
+}
+
+/* ====================================================================
+   SEPARADORES VISUALES MEJORADOS
+   ==================================================================== */
+
+.nav-button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-style: solid;
+}
+
+.nav-button + .nav-button {
+    -fx-border-color: rgba(255, 255, 255, 0.03) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.nav-button:last-child {
+    -fx-border-width: 0;
+}
+
+.nav-button-active {
+    -fx-border-color: transparent transparent transparent -color-accent-emphasis !important;
+    -fx-border-width: 0 0 0 5 !important;
+    -fx-border-style: solid !important;
+}
+
+.nav-button-active + .nav-button,
+.nav-button + .nav-button-active {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* ====================================================================
+   RESPONSIVIDAD PARA SIDEBAR
+   ==================================================================== */
+
+/* Pantallas medianas */
+@media screen and (max-width: 1200px) {
+    .sidebar {
+        -fx-min-width: 240px;
+        -fx-max-width: 240px;
+        -fx-pref-width: 240px;
     }
-    
-    .action-buttons .button {
+
+    .sidebar-logo-icon {
+        -fx-font-size: 24px;
+    }
+
+    .sidebar-app-name {
+        -fx-font-size: 16px;
+    }
+
+    .sidebar-app-subtitle {
+        -fx-font-size: 12px;
+    }
+
+    .theme-switcher-button {
         -fx-min-width: 100px;
+        -fx-font-size: 14px;
+        -fx-padding: 8 12 8 12;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .sidebar {
+        -fx-min-width: 220px;
+        -fx-max-width: 220px;
+        -fx-pref-width: 220px;
+    }
+
+    .nav-button {
+        -fx-padding: 16 20 16 20;
+        -fx-font-size: 14px;
+        -fx-min-height: 50px;
+    }
+
+    .sidebar-header {
+        -fx-min-height: 90px;
+    }
+
+    .sidebar-logo-icon {
+        -fx-font-size: 22px;
+        -fx-min-width: 28px;
+    }
+
+    .sidebar-app-name {
+        -fx-font-size: 15px;
+    }
+
+    .sidebar-app-subtitle {
+        -fx-font-size: 11px;
+    }
+
+    .theme-switcher-button {
+        -fx-min-width: 90px;
+        -fx-font-size: 13px;
+        -fx-padding: 6 10 6 10;
+        -fx-min-height: 32px;
     }
 }
 
 @media screen and (max-width: 768px) {
-    .view-title {
+    .sidebar {
+        -fx-min-width: 200px;
+        -fx-max-width: 200px;
+        -fx-pref-width: 200px;
+    }
+
+    .nav-button {
+        -fx-padding: 14 16 14 16;
+        -fx-font-size: 13px;
+        -fx-min-height: 46px;
+    }
+
+    .sidebar-header {
+        -fx-padding: 16px;
+        -fx-min-height: 80px;
+    }
+
+    .sidebar-logo-section {
+        -fx-spacing: 10;
+        -fx-min-height: 45px;
+    }
+
+    .sidebar-logo-icon {
         -fx-font-size: 20px;
+        -fx-min-width: 24px;
+    }
+
+    .sidebar-app-name {
+        -fx-font-size: 14px;
+    }
+
+    .sidebar-app-subtitle {
+        -fx-font-size: 10px;
+    }
+
+    .sidebar-actions {
+        -fx-min-height: 35px;
+    }
+
+    .theme-switcher-button {
+        -fx-min-width: 80px;
+        -fx-font-size: 12px;
+        -fx-padding: 5 8 5 8;
+        -fx-min-height: 28px;
+    }
+}
+
+/* ====================================================================
+   MEJORAS ESPECÍFICAS PARA TEMAS
+   ==================================================================== */
+
+/* Mejoras para tema oscuro */
+.root .sidebar {
+    -fx-background-color: derive(-color-bg-default, -8%);
+}
+
+.root .nav-button:hover:not(.nav-button-active) {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+}
+
+.root .nav-button:pressed:not(.nav-button-active) {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ====================================================================
+   ESTADOS ESPECÍFICOS PARA DEPURACIÓN
+   ==================================================================== */
+
+/* Asegurar que el estado activo siempre sea visible */
+.nav-button-active {
+    -fx-opacity: 1.0;
+}
+
+/* Remover cualquier efecto de focus que pueda interferir */
+.nav-button:focus-visible {
+    -fx-effect: none;
+    -fx-background-color: transparent;
+}
+
+/* ====================================================================
+   SCROLLPANE PARA TABLAS - RESPONSIVIDAD
+   ==================================================================== */
+
+/* Contenedor ScrollPane para tablas */
+.table-container .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-fit-to-width: false;
+    -fx-fit-to-height: true;
+}
+
+/* Contenido del ScrollPane */
+.table-container .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Barras de desplazamiento del ScrollPane */
+.table-container .scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 1 0 0 0;
+    -fx-pref-height: 16px;
+}
+
+.table-container .scroll-pane .scroll-bar:vertical {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 0 0 0 1;
+    -fx-pref-width: 16px;
+}
+
+/* Track de las barras de desplazamiento */
+.table-container .scroll-pane .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+/* Thumb (botón deslizante) de las barras */
+.table-container .scroll-pane .scroll-bar .thumb {
+    -fx-background-color: -color-border-default;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+}
+
+.table-container .scroll-pane .scroll-bar .thumb:hover {
+    -fx-background-color: -color-accent-emphasis;
+}
+
+.table-container .scroll-pane .scroll-bar .thumb:pressed {
+    -fx-background-color: derive(-color-accent-emphasis, -10%);
+}
+
+/* Botones de incremento/decremento (flechas) */
+.table-container .scroll-pane .scroll-bar .increment-button,
+.table-container .scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+/* Esquina donde se cruzan las barras */
+.table-container .scroll-pane .corner {
+    -fx-background-color: -color-bg-subtle;
+}
+
+/* ====================================================================
+   TABLA DENTRO DEL SCROLLPANE
+   ==================================================================== */
+
+/* Ajustar tabla para que funcione bien con ScrollPane */
+.table-container .scroll-pane .data-table {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-table-cell-size-policy: USE_COMPUTED_SIZE;
+}
+
+/* Headers de columna en ScrollPane */
+.table-container .scroll-pane .data-table .column-header-background {
+    -fx-background-radius: 0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -color-border-default;
+}
+
+/* Asegurar que las columnas respeten sus anchos mínimos */
+.table-container .scroll-pane .data-table .table-column {
+    -fx-min-width: USE_COMPUTED_SIZE;
+    -fx-pref-width: USE_COMPUTED_SIZE;
+}
+
+/* ====================================================================
+   MEJORAS DE RENDIMIENTO
+   ==================================================================== */
+
+/* Optimización para tablas grandes */
+.table-container .scroll-pane .data-table {
+    -fx-cell-size: 35px; /* Altura fija de celdas para mejor rendimiento */
+}
+
+/* Scroll suave */
+.table-container .scroll-pane {
+    -fx-smooth: true;
+    -fx-pannable: true;
+}
+
+/* ====================================================================
+   RESPONSIVIDAD ESPECÍFICA
+   ==================================================================== */
+
+@media screen and (max-width: 1024px) {
+    .table-container .scroll-pane .scroll-bar:horizontal {
+        -fx-pref-height: 14px;
     }
     
-    .app-title {
-        -fx-font-size: 18px;
+    .table-container .scroll-pane .scroll-bar:vertical {
+        -fx-pref-width: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .table-container .scroll-pane .scroll-bar:horizontal {
+        -fx-pref-height: 12px;
     }
     
-    .main-tabpane .tab {
-        -fx-padding: 6 12 6 12;
+    .table-container .scroll-pane .scroll-bar:vertical {
+        -fx-pref-width: 12px;
+    }
+    
+    /* Hacer el scroll más táctil en móviles */
+    .table-container .scroll-pane {
+        -fx-pannable: true;
+        -fx-hbar-policy: AS_NEEDED;
+        -fx-vbar-policy: AS_NEEDED;
     }
 }
