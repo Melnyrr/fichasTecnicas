@@ -410,7 +410,7 @@
     -fx-border-color: transparent transparent transparent -color-accent-emphasis !important;
     -fx-border-width: 0 0 0 4 !important;
     -fx-border-style: solid !important;
-    -fx-background-radius: 5;
+    -fx-background-radius: ;
 }
 
 /* Hover sobre botón activo - Mantener estilo pero con ligera variación */
