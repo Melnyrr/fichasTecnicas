@@ -359,7 +359,7 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-background-radius: 0;
+    -fx-background-radius: 10;
     -fx-border-radius: 0;
     -fx-border
     -fx-padding: 18 24 18 24;
@@ -653,101 +653,6 @@
 }
 
 /* ====================================================================
-   SCROLLPANE PARA TABLAS - RESPONSIVIDAD
-   ==================================================================== */
-
-/* Contenedor ScrollPane para tablas */
-.table-container .scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-fit-to-width: false;
-    -fx-fit-to-height: true;
-}
-
-/* Contenido del ScrollPane */
-.table-container .scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
-/* Barras de desplazamiento del ScrollPane */
-.table-container .scroll-pane .scroll-bar:horizontal {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-muted;
-    -fx-border-width: 1 0 0 0;
-    -fx-pref-height: 16px;
-}
-
-.table-container .scroll-pane .scroll-bar:vertical {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-muted;
-    -fx-border-width: 0 0 0 1;
-    -fx-pref-width: 16px;
-}
-
-/* Track de las barras de desplazamiento */
-.table-container .scroll-pane .scroll-bar .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0;
-}
-
-/* Thumb (botón deslizante) de las barras */
-.table-container .scroll-pane .scroll-bar .thumb {
-    -fx-background-color: -color-border-default;
-    -fx-background-radius: 8;
-    -fx-border-color: transparent;
-}
-
-.table-container .scroll-pane .scroll-bar .thumb:hover {
-    -fx-background-color: -color-accent-emphasis;
-}
-
-.table-container .scroll-pane .scroll-bar .thumb:pressed {
-    -fx-background-color: derive(-color-accent-emphasis, -10%);
-}
-
-/* Botones de incremento/decremento (flechas) */
-.table-container .scroll-pane .scroll-bar .increment-button,
-.table-container .scroll-pane .scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-pref-width: 0;
-    -fx-pref-height: 0;
-}
-
-/* Esquina donde se cruzan las barras */
-.table-container .scroll-pane .corner {
-    -fx-background-color: -color-bg-subtle;
-}
-
-/* ====================================================================
-   TABLA DENTRO DEL SCROLLPANE
-   ==================================================================== */
-
-/* Ajustar tabla para que funcione bien con ScrollPane */
-.table-container .scroll-pane .data-table {
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-table-cell-size-policy: USE_COMPUTED_SIZE;
-}
-
-/* Headers de columna en ScrollPane */
-.table-container .scroll-pane .data-table .column-header-background {
-    -fx-background-radius: 0;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: -color-border-default;
-}
-
-/* Asegurar que las columnas respeten sus anchos mínimos */
-.table-container .scroll-pane .data-table .table-column {
-    -fx-min-width: USE_COMPUTED_SIZE;
-    -fx-pref-width: USE_COMPUTED_SIZE;
-}
-
-/* ====================================================================
    MEJORAS DE RENDIMIENTO
    ==================================================================== */
 
@@ -760,6 +665,19 @@
 .table-container .scroll-pane {
     -fx-smooth: true;
     -fx-pannable: true;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:horizontal,
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
 }
 
 /* ====================================================================
@@ -791,4 +709,401 @@
         -fx-hbar-policy: AS_NEEDED;
         -fx-vbar-policy: AS_NEEDED;
     }
+}
+
+/* Estilos para el estado de los equipos en la tabla */
+.status-active {
+    -fx-background-color: #d4edda;
+    -fx-text-fill: #155724;
+    -fx-font-weight: bold;
+}
+
+.status-maintenance {
+    -fx-background-color: #fff3cd;
+    -fx-text-fill: #856404;
+    -fx-font-weight: bold;
+}
+
+.status-inactive {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: #721c24;
+    -fx-font-weight: bold;
+}
+
+/* Mejorar la apariencia de la tabla */
+.table-view {
+    -fx-selection-bar: #0078d4;
+    -fx-selection-bar-non-focused: #e3f2fd;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #e0e0e0;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view .table-cell {
+    -fx-border-color: #f0f0f0;
+    -fx-padding: 8px 12px;
+}
+
+/* Alternating row colors */
+.table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+
+/* Hover effect */
+.table-row-cell:hover {
+    -fx-background-color: #e3f2fd !important;
+}
+
+/* Selected row */
+.table-row-cell:selected {
+    -fx-background-color: #0078d4 !important;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+/* ====================================================================
+   ESTILOS ADICIONALES PARA TABLA COMPLETA DE EQUIPOS
+   Agregados sin conflictos con estilos existentes
+   ==================================================================== */
+
+/* Botón Info - nuevo, no existe en el CSS actual */
+.button.info {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-min-height: 36px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+.button.info:hover {
+    -fx-background-color: derive(-color-accent-emphasis, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 2);
+}
+
+.button.info:pressed {
+    -fx-background-color: derive(-color-accent-emphasis, -20%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+/* ====================================================================
+   MEJORAS ESPECÍFICAS PARA SCROLL HORIZONTAL
+   ==================================================================== */
+
+/* ScrollPane mejorado para tablas anchas */
+.table-container .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.table-container .scroll-pane .viewport {
+    -fx-background-color: -color-bg-default;
+    -fx-background-radius: 7;
+}
+
+/* Scroll bars mejorados específicos para tabla */
+.table-container .scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: -color-bg-subtle;
+    -fx-pref-height: 12px;
+    -fx-background-radius: 0 0 8 8;
+}
+
+.table-container .scroll-pane .scroll-bar:horizontal .track {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-radius: 0 0 8 8;
+}
+
+.table-container .scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: -color-fg-muted;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+.table-container .scroll-pane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: derive(-color-fg-muted, -10%);
+}
+
+.table-container .scroll-pane .scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: derive(-color-fg-muted, -20%);
+}
+
+/* ====================================================================
+   TOOLTIPS MEJORADOS
+   ==================================================================== */
+
+.table-tooltip {
+    -fx-background-color: derive(-color-bg-default, -20%);
+    -fx-text-fill: -color-fg-default;
+    -fx-background-radius: 6;
+    -fx-font-size: 11px;
+    -fx-padding: 8px 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 2);
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+
+/* ====================================================================
+   ESTILOS ESPECÍFICOS PARA COLUMNAS DE EQUIPOS
+   ==================================================================== */
+
+/* Estados de equipos - versión mejorada sin conflictos */
+.equipment-status-active {
+    -fx-background-color: derive(-color-success-emphasis, 80%);
+    -fx-text-fill: derive(-color-success-emphasis, -30%);
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-padding: 2px 8px;
+}
+
+.equipment-status-maintenance {
+    -fx-background-color: derive(-color-attention-emphasis, 80%);
+    -fx-text-fill: derive(-color-attention-emphasis, -30%);
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-padding: 2px 8px;
+}
+
+.equipment-status-inactive {
+    -fx-background-color: derive(-color-danger-emphasis, 80%);
+    -fx-text-fill: derive(-color-danger-emphasis, -30%);
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-padding: 2px 8px;
+}
+
+/* Tipos de equipo con estilos específicos */
+.equipment-type-computer {
+    -fx-background-color: derive(-color-accent-emphasis, 85%);
+    -fx-text-fill: derive(-color-accent-emphasis, -20%);
+    -fx-font-weight: 600;
+    -fx-background-radius: 3;
+    -fx-padding: 1px 6px;
+}
+
+.equipment-type-printer {
+    -fx-background-color: derive(#9c27b0, 85%);
+    -fx-text-fill: derive(#9c27b0, -20%);
+    -fx-font-weight: 600;
+    -fx-background-radius: 3;
+    -fx-padding: 1px 6px;
+}
+
+.equipment-type-monitor {
+    -fx-background-color: derive(#ff9800, 85%);
+    -fx-text-fill: derive(#ff9800, -20%);
+    -fx-font-weight: 600;
+    -fx-background-radius: 3;
+    -fx-padding: 1px 6px;
+}
+
+.equipment-type-laptop {
+    -fx-background-color: derive(#4caf50, 85%);
+    -fx-text-fill: derive(#4caf50, -20%);
+    -fx-font-weight: 600;
+    -fx-background-radius: 3;
+    -fx-padding: 1px 6px;
+}
+
+.equipment-type-router {
+    -fx-background-color: derive(#f44336, 85%);
+    -fx-text-fill: derive(#f44336, -20%);
+    -fx-font-weight: 600;
+    -fx-background-radius: 3;
+    -fx-padding: 1px 6px;
+}
+
+/* ====================================================================
+   MEJORAS PARA CELDAS DE TABLA ESPECÍFICAS
+   ==================================================================== */
+
+/* Celda de ID centrada */
+.table-cell-id {
+    -fx-alignment: CENTER;
+    -fx-font-weight: 600;
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-background-color: derive(-color-bg-subtle, 5%);
+}
+
+/* Celda de código interno estilizada */
+.table-cell-code {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: derive(-color-fg-default, -10%);
+    -fx-background-color: derive(-color-bg-subtle, 2%);
+    -fx-padding: 4px 6px;
+}
+
+/* Celda de fecha centrada */
+.table-cell-date {
+    -fx-alignment: CENTER;
+    -fx-font-size: 11px;
+    -fx-text-fill: derive(-color-fg-default, -5%);
+}
+
+/* Celda de estado centrada */
+.table-cell-status {
+    -fx-alignment: CENTER;
+}
+
+/* Celda de tipo de equipo */
+.table-cell-type {
+    -fx-alignment: CENTER;
+    -fx-font-weight: 600;
+}
+
+/* ====================================================================
+   BARRA DE ESTADO MEJORADA
+   ==================================================================== */
+
+/* Texto informativo adicional */
+.status-text-info {
+    -fx-font-size: 11px;
+    -fx-text-fill: derive(-color-fg-muted, 10%);
+    -fx-font-style: italic;
+}
+
+/* Indicador de scroll */
+.scroll-indicator {
+    -fx-background-color: derive(-color-accent-emphasis, 90%);
+    -fx-text-fill: -color-accent-emphasis;
+    -fx-font-size: 10px;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 3;
+    -fx-font-weight: 500;
+}
+
+/* ====================================================================
+   ANIMACIONES SUTILES PARA TABLA
+   ==================================================================== */
+
+/* Transición suave para hover en celdas */
+.data-table .table-cell {
+    -fx-transition: -fx-background-color 0.15s ease-out;
+}
+
+/* Transición para estados de equipo */
+.equipment-status-active,
+.equipment-status-maintenance,
+.equipment-status-inactive {
+    -fx-transition: 
+        -fx-background-color 0.2s ease-out,
+        -fx-text-fill 0.2s ease-out;
+}
+
+/* ====================================================================
+   RESPONSIVIDAD PARA TABLA COMPLETA
+   ==================================================================== */
+
+@media screen and (max-width: 1400px) {
+    /* Ocultar columnas menos importantes en pantallas medianas */
+    .hide-on-medium {
+        -fx-pref-width: 0;
+        -fx-min-width: 0;
+        -fx-max-width: 0;
+        -fx-visible: false;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    /* Reducir padding en celdas */
+    .data-table .table-cell {
+        -fx-padding: 6px 4px;
+        -fx-font-size: 11px;
+    }
+    
+    /* Hacer scroll bars más gruesos para touch */
+    .table-container .scroll-pane .scroll-bar:horizontal {
+        -fx-pref-height: 16px;
+    }
+    
+    /* Ocultar más columnas en tablets */
+    .hide-on-tablet {
+        -fx-pref-width: 0;
+        -fx-min-width: 0;
+        -fx-max-width: 0;
+        -fx-visible: false;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Reducir aún más el padding */
+    .data-table .table-cell {
+        -fx-padding: 4px 3px;
+        -fx-font-size: 10px;
+    }
+    
+    /* Hacer headers más compactos */
+    .data-table .column-header {
+        -fx-padding: 8px 4px;
+        -fx-font-size: 10px;
+    }
+    
+    /* Scroll más grueso para móviles */
+    .table-container .scroll-pane .scroll-bar:horizontal {
+        -fx-pref-height: 20px;
+    }
+    
+    /* Ocultar columnas adicionales en móviles */
+    .hide-on-mobile {
+        -fx-pref-width: 0;
+        -fx-min-width: 0;
+        -fx-max-width: 0;
+        -fx-visible: false;
+    }
+}
+
+/* ====================================================================
+   FALLBACKS PARA TEMA OSCURO/CLARO
+   ==================================================================== */
+
+/* Asegurar contraste en tema oscuro */
+.root:dark .equipment-status-active {
+    -fx-background-color: derive(-color-success-emphasis, 60%);
+    -fx-text-fill: derive(-color-success-emphasis, 40%);
+}
+
+.root:dark .equipment-status-maintenance {
+    -fx-background-color: derive(-color-attention-emphasis, 60%);
+    -fx-text-fill: derive(-color-attention-emphasis, 40%);
+}
+
+.root:dark .equipment-status-inactive {
+    -fx-background-color: derive(-color-danger-emphasis, 60%);
+    -fx-text-fill: derive(-color-danger-emphasis, 40%);
+}
+
+/* Asegurar contraste en tema claro */
+.root:light .equipment-status-active {
+    -fx-background-color: derive(-color-success-emphasis, 90%);
+    -fx-text-fill: derive(-color-success-emphasis, -40%);
+}
+
+.root:light .equipment-status-maintenance {
+    -fx-background-color: derive(-color-attention-emphasis, 90%);
+    -fx-text-fill: derive(-color-attention-emphasis, -40%);
+}
+
+.root:light .equipment-status-inactive {
+    -fx-background-color: derive(-color-danger-emphasis, 90%);
+    -fx-text-fill: derive(-color-danger-emphasis, -40%);
 }

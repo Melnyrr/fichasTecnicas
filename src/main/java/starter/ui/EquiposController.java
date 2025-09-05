@@ -1,86 +1,281 @@
 package starter.ui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import starter.dao.EquipoDAO;
+import starter.model.Equipo;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
- * Controlador para la vista de gestión de equipos.
- * Maneja la interacción con la tabla de equipos y los botones de acción.
+ * Controlador completo para la vista de gestión de equipos. Incluye todas las
+ * columnas disponibles en la base de datos.
  */
 public class EquiposController {
 
+    // Tabla y columnas
     @FXML
-    private TableView<?> equiposTable;
-
+    private TableView<Equipo> equiposTable;
     @FXML
-    private TableColumn<?, ?> idColumn;
-
+    private TableColumn<Equipo, Integer> idColumn;
     @FXML
-    private TableColumn<?, ?> nombreColumn;
-
+    private TableColumn<Equipo, String> tipoEquipoColumn;
     @FXML
-    private TableColumn<?, ?> marcaColumn;
-
+    private TableColumn<Equipo, String> nombreColumn;
     @FXML
-    private TableColumn<?, ?> modeloColumn;
-
+    private TableColumn<Equipo, String> marcaColumn;
     @FXML
-    private TableColumn<?, ?> serialColumn;
-
+    private TableColumn<Equipo, String> modeloColumn;
     @FXML
-    private TableColumn<?, ?> estadoColumn;
-
+    private TableColumn<Equipo, String> serialColumn;
     @FXML
-    private TableColumn<?, ?> fechaColumn;
+    private TableColumn<Equipo, String> codigoInternoColumn;
+    @FXML
+    private TableColumn<Equipo, String> interfazColumn;
+    @FXML
+    private TableColumn<Equipo, String> ubicacionColumn;
+    @FXML
+    private TableColumn<Equipo, String> proveedorColumn;
+    @FXML
+    private TableColumn<Equipo, LocalDate> fechaColumn;
+    @FXML
+    private TableColumn<Equipo, String> estadoColumn;
+    @FXML
+    private TableColumn<Equipo, String> referenciaPartesColumn;
 
+    // Botones
     @FXML
     private Button agregarBtn;
-
     @FXML
     private Button editarBtn;
-
     @FXML
     private Button eliminarBtn;
+    @FXML
+    private Button verDetalleBtn;
 
+    // Labels de estado
     @FXML
     private Label totalEquiposLabel;
-
     @FXML
     private Label equiposActivosLabel;
-
     @FXML
     private Label equiposMantenimientoLabel;
+    @FXML
+    private Label columnaInfoLabel;
 
-    /**
-     * Inicializa el controlador después de cargar el FXML.
-     */
+    // DAO y datos
+    private EquipoDAO equipoDAO;
+    private ObservableList<Equipo> equiposData;
+
+    public EquiposController() {
+        this.equipoDAO = new EquipoDAO();
+        this.equiposData = FXCollections.observableArrayList();
+    }
+
     @FXML
     private void initialize() {
+        setupTableColumns();
         setupTable();
         setupButtons();
-        updateStatusLabels();
         loadEquipos();
+        updateStatusLabels();
+    }
+
+    /**
+     * Configura todas las columnas de la tabla vinculándolas con las
+     * propiedades del modelo.
+     */
+    private void setupTableColumns() {
+        // Columnas principales
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tipoEquipoColumn.setCellValueFactory(new PropertyValueFactory<>("tipoEquipo"));
+        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        modeloColumn.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+
+        // Información de identificación
+        serialColumn.setCellValueFactory(new PropertyValueFactory<>("serie"));
+        codigoInternoColumn.setCellValueFactory(new PropertyValueFactory<>("codigoInterno"));
+
+        // Información técnica
+        interfazColumn.setCellValueFactory(new PropertyValueFactory<>("interfaz"));
+
+        // Información de ubicación y gestión
+        ubicacionColumn.setCellValueFactory(new PropertyValueFactory<>("ubicacion"));
+        proveedorColumn.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
+        fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaCompra"));
+        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        referenciaPartesColumn.setCellValueFactory(new PropertyValueFactory<>("referenciaPartes"));
+
+        // Formateo personalizado para algunas columnas
+        setupCustomCellFormatting();
+    }
+
+    /**
+     * Configura formato personalizado para ciertas columnas.
+     */
+    private void setupCustomCellFormatting() {
+        // Columna ID - centrar
+        idColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                        setStyle("-fx-alignment: CENTER;");
+                    }
+                }
+            };
+        });
+
+        // Columna de fecha - formatear y centrar
+        fechaColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, LocalDate>() {
+                private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                @Override
+                protected void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText("--");
+                        setStyle("-fx-alignment: CENTER; -fx-text-fill: #999999;");
+                    } else {
+                        setText(formatter.format(item));
+                        setStyle("-fx-alignment: CENTER;");
+                    }
+                }
+            };
+        });
+
+        // Columna de estado - aplicar estilos según el valor
+        estadoColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setStyle("-fx-alignment: CENTER;");
+
+                        // Aplicar estilos según el estado
+                        getStyleClass().removeAll("status-active", "status-maintenance", "status-inactive");
+                        switch (item.toLowerCase()) {
+// Cambiar estas líneas en el método de formato de estado:
+                            case "activo":
+                                getStyleClass().add("equipment-status-active"); // Cambio aquí
+                                break;
+                            case "en mantenimiento":
+                                getStyleClass().add("equipment-status-maintenance"); // Cambio aquí
+                                break;
+                            case "inactivo":
+                                getStyleClass().add("equipment-status-inactive"); // Cambio aquí
+                                break;
+                        }
+                    }
+                }
+            };
+        });
+
+        // Columna de tipo de equipo - aplicar estilo
+        tipoEquipoColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                        setStyle("-fx-font-weight: bold; -fx-alignment: CENTER;");
+                    }
+                }
+            };
+        });
+
+        // Columna de interfaces - ajustar texto largo
+        interfazColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setTooltip(null);
+                    } else {
+                        // Mostrar texto truncado si es muy largo
+                        if (item.length() > 15) {
+                            setText(item.substring(0, 12) + "...");
+                            setTooltip(new javafx.scene.control.Tooltip(item));
+                        } else {
+                            setText(item);
+                            setTooltip(null);
+                        }
+                    }
+                }
+            };
+        });
+
+        // Similar para referencia de partes
+        referenciaPartesColumn.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<Equipo, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setTooltip(null);
+                    } else {
+                        if (item.length() > 20) {
+                            setText(item.substring(0, 17) + "...");
+                            setTooltip(new javafx.scene.control.Tooltip(item));
+                        } else {
+                            setText(item);
+                            setTooltip(null);
+                        }
+                    }
+                }
+            };
+        });
     }
 
     /**
      * Configura la tabla de equipos.
      */
     private void setupTable() {
-        // Configurar selección de fila
+        equiposTable.setItems(equiposData);
+
         equiposTable.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldSelection, newSelection) -> {
-                boolean hasSelection = newSelection != null;
-                editarBtn.setDisable(!hasSelection);
-                eliminarBtn.setDisable(!hasSelection);
-            }
+                (observable, oldSelection, newSelection) -> {
+                    boolean hasSelection = newSelection != null;
+                    editarBtn.setDisable(!hasSelection);
+                    eliminarBtn.setDisable(!hasSelection);
+                    verDetalleBtn.setDisable(!hasSelection);
+                }
         );
 
-        // Inicialmente deshabilitar botones de edición y eliminación
         editarBtn.setDisable(true);
         eliminarBtn.setDisable(true);
+        verDetalleBtn.setDisable(true);
+
+        equiposTable.setPlaceholder(new Label("No hay equipos registrados"));
+
+        // TableView maneja automáticamente el scroll horizontal y vertical
+        equiposTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     }
 
     /**
@@ -90,55 +285,158 @@ public class EquiposController {
         agregarBtn.setOnAction(e -> handleAgregarEquipo());
         editarBtn.setOnAction(e -> handleEditarEquipo());
         eliminarBtn.setOnAction(e -> handleEliminarEquipo());
-    }
-
-    /**
-     * Actualiza las etiquetas de estado.
-     */
-    private void updateStatusLabels() {
-        // TODO: Implementar lógica real cuando se conecte con la base de datos
-        int totalEquipos = 0;  // Obtener de la base de datos
-        int equiposActivos = 0;
-        int equiposEnMantenimiento = 0;
-
-        totalEquiposLabel.setText("Total de equipos: " + totalEquipos);
-        equiposActivosLabel.setText("Activos: " + equiposActivos);
-        equiposMantenimientoLabel.setText("En mantenimiento: " + equiposEnMantenimiento);
+        verDetalleBtn.setOnAction(e -> handleVerDetalle());
     }
 
     /**
      * Carga los equipos desde la base de datos.
      */
     private void loadEquipos() {
-        // TODO: Implementar carga de datos desde la base de datos
-        System.out.println("Cargando equipos desde la base de datos...");
+        try {
+            equiposData.clear();
+            var equipos = equipoDAO.getAllEquipos();
+            equiposData.addAll(equipos);
+
+            System.out.println("Cargados " + equipos.size() + " equipos desde la base de datos");
+
+        } catch (Exception e) {
+            System.err.println("Error cargando equipos: " + e.getMessage());
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de Conexión");
+            alert.setHeaderText("No se pudieron cargar los equipos");
+            alert.setContentText("Verifique la conexión a la base de datos.\nError: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     /**
-     * Maneja el evento de agregar un nuevo equipo.
+     * Actualiza las etiquetas de estado.
      */
+    private void updateStatusLabels() {
+        try {
+            int totalEquipos = equipoDAO.getTotalEquipos();
+            int equiposActivos = equipoDAO.getEquiposByEstado("Activo");
+            int equiposEnMantenimiento = equipoDAO.getEquiposByEstado("En Mantenimiento");
+
+            totalEquiposLabel.setText("Total de equipos: " + totalEquipos);
+            equiposActivosLabel.setText("Activos: " + equiposActivos);
+            equiposMantenimientoLabel.setText("En mantenimiento: " + equiposEnMantenimiento);
+
+        } catch (Exception e) {
+            System.err.println("Error actualizando etiquetas de estado: " + e.getMessage());
+            totalEquiposLabel.setText("Total de equipos: --");
+            equiposActivosLabel.setText("Activos: --");
+            equiposMantenimientoLabel.setText("En mantenimiento: --");
+        }
+    }
+
     @FXML
     private void handleAgregarEquipo() {
-        System.out.println("Agregar nuevo equipo");
-        // TODO: Abrir ventana de diálogo para agregar equipo
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Funcionalidad en desarrollo");
+        alert.setHeaderText("Agregar Equipo");
+        alert.setContentText("Esta funcionalidad será implementada próximamente.");
+        alert.showAndWait();
     }
 
-    /**
-     * Maneja el evento de editar un equipo existente.
-     */
     @FXML
     private void handleEditarEquipo() {
-        System.out.println("Editar equipo seleccionado");
-        // TODO: Abrir ventana de diálogo para editar equipo
+        Equipo equipoSeleccionado = equiposTable.getSelectionModel().getSelectedItem();
+
+        if (equipoSeleccionado != null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Editar Equipo");
+            alert.setHeaderText("Información del equipo seleccionado:");
+            alert.setContentText(buildEquipoDetailText(equipoSeleccionado));
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleEliminarEquipo() {
+        Equipo equipoSeleccionado = equiposTable.getSelectionModel().getSelectedItem();
+
+        if (equipoSeleccionado != null) {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Confirmar Eliminación");
+            confirmAlert.setHeaderText("¿Está seguro de eliminar este equipo?");
+            confirmAlert.setContentText("Equipo: " + equipoSeleccionado.getNombre()
+                    + " (" + equipoSeleccionado.getMarca() + " "
+                    + equipoSeleccionado.getModelo() + ")");
+
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == javafx.scene.control.ButtonType.OK) {
+                    if (equipoDAO.deleteEquipo(equipoSeleccionado.getId())) {
+                        equiposData.remove(equipoSeleccionado);
+                        updateStatusLabels();
+
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Eliminación Exitosa");
+                        successAlert.setHeaderText("Equipo eliminado");
+                        successAlert.setContentText("El equipo ha sido eliminado correctamente.");
+                        successAlert.showAndWait();
+
+                        System.out.println("Equipo eliminado correctamente");
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error de Eliminación");
+                        errorAlert.setHeaderText("No se pudo eliminar el equipo");
+                        errorAlert.setContentText("Ha ocurrido un error al intentar eliminar el equipo.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            });
+        }
+    }
+
+    @FXML
+    private void handleVerDetalle() {
+        Equipo equipoSeleccionado = equiposTable.getSelectionModel().getSelectedItem();
+
+        if (equipoSeleccionado != null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Detalle del Equipo");
+            alert.setHeaderText("Información completa:");
+            alert.setContentText(buildEquipoDetailText(equipoSeleccionado));
+
+            // Hacer el diálogo más grande
+            alert.getDialogPane().setPrefWidth(500);
+            alert.getDialogPane().setPrefHeight(400);
+
+            alert.showAndWait();
+        }
     }
 
     /**
-     * Maneja el evento de eliminar un equipo.
+     * Construye un texto detallado con toda la información del equipo.
      */
-    @FXML
-    private void handleEliminarEquipo() {
-        System.out.println("Eliminar equipo seleccionado");
-        // TODO: Mostrar confirmación y eliminar equipo
+    private String buildEquipoDetailText(Equipo equipo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(equipo.getId()).append("\n");
+        sb.append("Tipo: ").append(nvl(equipo.getTipoEquipo())).append("\n");
+        sb.append("Nombre: ").append(nvl(equipo.getNombre())).append("\n");
+        sb.append("Marca: ").append(nvl(equipo.getMarca())).append("\n");
+        sb.append("Modelo: ").append(nvl(equipo.getModelo())).append("\n");
+        sb.append("Serie: ").append(nvl(equipo.getSerie())).append("\n");
+        sb.append("Código Interno: ").append(nvl(equipo.getCodigoInterno())).append("\n");
+        sb.append("Interfaces: ").append(nvl(equipo.getInterfaz())).append("\n");
+        sb.append("Ubicación: ").append(nvl(equipo.getUbicacion())).append("\n");
+        sb.append("Proveedor: ").append(nvl(equipo.getProveedor())).append("\n");
+        sb.append("Fecha de Compra: ").append(equipo.getFechaCompra() != null
+                ? equipo.getFechaCompra().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "No especificada").append("\n");
+        sb.append("Estado: ").append(nvl(equipo.getEstado())).append("\n");
+        sb.append("Referencia/Manual: ").append(nvl(equipo.getReferenciaPartes()));
+
+        return sb.toString();
+    }
+
+    /**
+     * Maneja valores nulos para mostrar texto más amigable.
+     */
+    private String nvl(String value) {
+        return value != null && !value.trim().isEmpty() ? value : "No especificado";
     }
 
     /**
@@ -147,5 +445,12 @@ public class EquiposController {
     public void refresh() {
         loadEquipos();
         updateStatusLabels();
+    }
+
+    /**
+     * Obtiene el equipo seleccionado en la tabla.
+     */
+    public Equipo getSelectedEquipo() {
+        return equiposTable.getSelectionModel().getSelectedItem();
     }
 }

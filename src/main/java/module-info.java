@@ -18,4 +18,5 @@ module starter {
     // Abren tus paquetes al módulo de FXML para que pueda acceder a tus controladores.
     opens starter to javafx.fxml;
     opens starter.ui to javafx.fxml;
+    opens starter.model to javafx.base, javafx.fxml;
 }

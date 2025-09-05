@@ -17,7 +17,7 @@
     <!-- Header Section -->
     <VBox spacing="8" styleClass="header-section">
         <Label text="Gestión de Equipos" styleClass="view-title"/>
-        <Label text="Administra el inventario y estado de todos los equipos tecnolÃ³gicos" styleClass="view-subtitle"/>
+        <Label text="Administra el inventario y estado de todos los equipos tecnológicos" styleClass="view-subtitle"/>
     </VBox>
     
     <!-- Action Buttons -->
@@ -25,30 +25,52 @@
         <Button fx:id="agregarBtn" text="Agregar Equipo" styleClass="success" minWidth="130"/>
         <Button fx:id="editarBtn" text="Editar Equipo" styleClass="accent" minWidth="130"/>
         <Button fx:id="eliminarBtn" text="Eliminar Equipo" styleClass="danger" minWidth="130"/>
+        <Button fx:id="verDetalleBtn" text="Ver Detalle" styleClass="info" minWidth="130"/>
     </HBox>
     
-    <!-- Equipment Table -->
+    <!-- Equipment Table WITHOUT ScrollPane -->
     <VBox VBox.vgrow="ALWAYS" spacing="10" styleClass="table-container">
+        <!-- Tabla directa - TableView maneja su propio scroll -->
         <TableView fx:id="equiposTable" VBox.vgrow="ALWAYS" styleClass="data-table">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="60" minWidth="50" maxWidth="80" resizable="false"/>
-                <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="180" minWidth="120"/>
-                <TableColumn fx:id="marcaColumn" text="Marca" prefWidth="140" minWidth="100"/>
-                <TableColumn fx:id="modeloColumn" text="Modelo" prefWidth="140" minWidth="100"/>
-                <TableColumn fx:id="serialColumn" text="NÃºmero de Serie" prefWidth="170" minWidth="130"/>
-                <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="120" minWidth="90"/>
-                <TableColumn fx:id="fechaColumn" text="Fecha de AdquisiciÃ³n" prefWidth="160" minWidth="130"/>
+                <!-- Columnas principales (siempre visibles) -->
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50" minWidth="40" maxWidth="60" resizable="false"/>
+                <TableColumn fx:id="tipoEquipoColumn" text="Tipo" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="150" minWidth="120"/>
+                <TableColumn fx:id="marcaColumn" text="Marca" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="modeloColumn" text="Modelo" prefWidth="120" minWidth="100"/>
+                
+                <!-- Información de identificación -->
+                <TableColumn fx:id="serialColumn" text="Número de Serie" prefWidth="130" minWidth="110"/>
+                <TableColumn fx:id="codigoInternoColumn" text="Código Interno" prefWidth="110" minWidth="90"/>
+                
+                <!-- Información técnica -->
+                <TableColumn fx:id="interfazColumn" text="Interfaces" prefWidth="120" minWidth="100"/>
+                
+                <!-- Información de ubicación y gestión -->
+                <TableColumn fx:id="ubicacionColumn" text="Ubicación" prefWidth="120" minWidth="100"/>
+                <TableColumn fx:id="proveedorColumn" text="Proveedor" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="fechaColumn" text="Fecha de Compra" prefWidth="120" minWidth="100"/>
+                <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="referenciaPartesColumn" text="Referencia/Manual" prefWidth="150" minWidth="120"/>
             </columns>
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
         </TableView>
         
-        <!-- Status Bar -->
-        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="status-bar">
-            <Label fx:id="totalEquiposLabel" text="Total de equipos: 0" styleClass="status-text"/>
-            <Label fx:id="equiposActivosLabel" text="Activos: 0" styleClass="status-text-secondary"/>
-            <Label fx:id="equiposMantenimientoLabel" text="En mantenimiento: 0" styleClass="status-text-warning"/>
-        </HBox>
-    </VBox>
+
+    </VBox>        
+    <!-- Status Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="status-bar">
+        <Label fx:id="totalEquiposLabel" text="Total de equipos: 0" styleClass="status-text"/>
+        <Label fx:id="equiposActivosLabel" text="Activos: 0" styleClass="status-text-secondary"/>
+        <Label fx:id="equiposMantenimientoLabel" text="En mantenimiento: 0" styleClass="status-text-warning"/>
+            
+        <!-- Spacer -->
+        <Label style="-fx-min-width: 50px;"/>
+            
+        <!-- Información adicional -->
+        <Label fx:id="columnaInfoLabel" text="Usa scroll horizontal para ver todas las columnas" styleClass="status-text-info"/>
+    </HBox>
 </VBox>
