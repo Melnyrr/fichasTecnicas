@@ -9,7 +9,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import starter.dao.EquipoDAO;
 import starter.model.Equipo;
 
@@ -17,60 +16,42 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Controlador completo para la vista de gestión de equipos. Incluye todas las
- * columnas disponibles en la base de datos.
+ * Controlador completo para la vista de gestión de equipos con botones de iconos.
+ * Incluye todas las columnas disponibles en la base de datos.
  */
 public class EquiposController {
 
     // Tabla y columnas
-    @FXML
-    private TableView<Equipo> equiposTable;
-    @FXML
-    private TableColumn<Equipo, Integer> idColumn;
-    @FXML
-    private TableColumn<Equipo, String> tipoEquipoColumn;
-    @FXML
-    private TableColumn<Equipo, String> nombreColumn;
-    @FXML
-    private TableColumn<Equipo, String> marcaColumn;
-    @FXML
-    private TableColumn<Equipo, String> modeloColumn;
-    @FXML
-    private TableColumn<Equipo, String> serialColumn;
-    @FXML
-    private TableColumn<Equipo, String> codigoInternoColumn;
-    @FXML
-    private TableColumn<Equipo, String> interfazColumn;
-    @FXML
-    private TableColumn<Equipo, String> ubicacionColumn;
-    @FXML
-    private TableColumn<Equipo, String> proveedorColumn;
-    @FXML
-    private TableColumn<Equipo, LocalDate> fechaColumn;
-    @FXML
-    private TableColumn<Equipo, String> estadoColumn;
-    @FXML
-    private TableColumn<Equipo, String> referenciaPartesColumn;
+    @FXML private TableView<Equipo> equiposTable;
+    @FXML private TableColumn<Equipo, Integer> idColumn;
+    @FXML private TableColumn<Equipo, String> tipoEquipoColumn;
+    @FXML private TableColumn<Equipo, String> nombreColumn;
+    @FXML private TableColumn<Equipo, String> marcaColumn;
+    @FXML private TableColumn<Equipo, String> modeloColumn;
+    @FXML private TableColumn<Equipo, String> serialColumn;
+    @FXML private TableColumn<Equipo, String> codigoInternoColumn;
+    @FXML private TableColumn<Equipo, String> interfazColumn;
+    @FXML private TableColumn<Equipo, String> ubicacionColumn;
+    @FXML private TableColumn<Equipo, String> proveedorColumn;
+    @FXML private TableColumn<Equipo, LocalDate> fechaColumn;
+    @FXML private TableColumn<Equipo, String> estadoColumn;
+    @FXML private TableColumn<Equipo, String> referenciaPartesColumn;
 
-    // Botones
-    @FXML
-    private Button agregarBtn;
-    @FXML
-    private Button editarBtn;
-    @FXML
-    private Button eliminarBtn;
-    @FXML
-    private Button verDetalleBtn;
+    // Botones principales con iconos
+    @FXML private Button agregarBtn;
+    @FXML private Button editarBtn;
+    @FXML private Button eliminarBtn;
+    @FXML private Button verDetalleBtn;
+    
+    // Botones adicionales
+    @FXML private Button refreshBtn;
+    @FXML private Button exportBtn;
 
     // Labels de estado
-    @FXML
-    private Label totalEquiposLabel;
-    @FXML
-    private Label equiposActivosLabel;
-    @FXML
-    private Label equiposMantenimientoLabel;
-    @FXML
-    private Label columnaInfoLabel;
+    @FXML private Label totalEquiposLabel;
+    @FXML private Label equiposActivosLabel;
+    @FXML private Label equiposMantenimientoLabel;
+    @FXML private Label columnaInfoLabel;
 
     // DAO y datos
     private EquipoDAO equipoDAO;
@@ -173,17 +154,16 @@ public class EquiposController {
                         setStyle("-fx-alignment: CENTER;");
 
                         // Aplicar estilos según el estado
-                        getStyleClass().removeAll("status-active", "status-maintenance", "status-inactive");
+                        getStyleClass().removeAll("equipment-status-active", "equipment-status-maintenance", "equipment-status-inactive");
                         switch (item.toLowerCase()) {
-// Cambiar estas líneas en el método de formato de estado:
                             case "activo":
-                                getStyleClass().add("equipment-status-active"); // Cambio aquí
+                                getStyleClass().add("equipment-status-active");
                                 break;
                             case "en mantenimiento":
-                                getStyleClass().add("equipment-status-maintenance"); // Cambio aquí
+                                getStyleClass().add("equipment-status-maintenance");
                                 break;
                             case "inactivo":
-                                getStyleClass().add("equipment-status-inactive"); // Cambio aquí
+                                getStyleClass().add("equipment-status-inactive");
                                 break;
                         }
                     }
@@ -217,7 +197,6 @@ public class EquiposController {
                         setText(null);
                         setTooltip(null);
                     } else {
-                        // Mostrar texto truncado si es muy largo
                         if (item.length() > 15) {
                             setText(item.substring(0, 12) + "...");
                             setTooltip(new javafx.scene.control.Tooltip(item));
@@ -260,32 +239,36 @@ public class EquiposController {
         equiposTable.setItems(equiposData);
 
         equiposTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldSelection, newSelection) -> {
-                    boolean hasSelection = newSelection != null;
-                    editarBtn.setDisable(!hasSelection);
-                    eliminarBtn.setDisable(!hasSelection);
-                    verDetalleBtn.setDisable(!hasSelection);
-                }
+            (observable, oldSelection, newSelection) -> {
+                boolean hasSelection = newSelection != null;
+                editarBtn.setDisable(!hasSelection);
+                eliminarBtn.setDisable(!hasSelection);
+                verDetalleBtn.setDisable(!hasSelection);
+            }
         );
 
+        // Deshabilitar botones que requieren selección inicialmente
         editarBtn.setDisable(true);
         eliminarBtn.setDisable(true);
         verDetalleBtn.setDisable(true);
 
         equiposTable.setPlaceholder(new Label("No hay equipos registrados"));
-
-        // TableView maneja automáticamente el scroll horizontal y vertical
         equiposTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     }
 
     /**
-     * Configura los event handlers de los botones.
+     * Configura los event handlers de todos los botones.
      */
     private void setupButtons() {
+        // Botones principales
         agregarBtn.setOnAction(e -> handleAgregarEquipo());
         editarBtn.setOnAction(e -> handleEditarEquipo());
         eliminarBtn.setOnAction(e -> handleEliminarEquipo());
         verDetalleBtn.setOnAction(e -> handleVerDetalle());
+        
+        // Botones adicionales
+        refreshBtn.setOnAction(e -> handleRefresh());
+        exportBtn.setOnAction(e -> handleExport());
     }
 
     /**
@@ -332,12 +315,16 @@ public class EquiposController {
         }
     }
 
+    // ====================================================================
+    // MANEJADORES DE EVENTOS DE BOTONES PRINCIPALES
+    // ====================================================================
+
     @FXML
     private void handleAgregarEquipo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Funcionalidad en desarrollo");
-        alert.setHeaderText("Agregar Equipo");
-        alert.setContentText("Esta funcionalidad será implementada próximamente.");
+        alert.setTitle("Agregar Equipo");
+        alert.setHeaderText("Nueva funcionalidad");
+        alert.setContentText("El formulario para agregar equipos será implementado próximamente.");
         alert.showAndWait();
     }
 
@@ -350,6 +337,8 @@ public class EquiposController {
             alert.setTitle("Editar Equipo");
             alert.setHeaderText("Información del equipo seleccionado:");
             alert.setContentText(buildEquipoDetailText(equipoSeleccionado));
+            alert.getDialogPane().setPrefWidth(500);
+            alert.getDialogPane().setPrefHeight(400);
             alert.showAndWait();
         }
     }
@@ -400,14 +389,46 @@ public class EquiposController {
             alert.setTitle("Detalle del Equipo");
             alert.setHeaderText("Información completa:");
             alert.setContentText(buildEquipoDetailText(equipoSeleccionado));
-
-            // Hacer el diálogo más grande
             alert.getDialogPane().setPrefWidth(500);
             alert.getDialogPane().setPrefHeight(400);
-
             alert.showAndWait();
         }
     }
+
+    // ====================================================================
+    // MANEJADORES DE EVENTOS DE BOTONES ADICIONALES
+    // ====================================================================
+
+    @FXML
+    private void handleRefresh() {
+        System.out.println("Actualizando lista de equipos...");
+        loadEquipos();
+        updateStatusLabels();
+        
+        // Mostrar feedback visual opcional
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Actualización");
+        info.setHeaderText("Lista actualizada");
+        info.setContentText("La lista de equipos ha sido actualizada correctamente.");
+        info.showAndWait();
+    }
+
+    @FXML
+    private void handleExport() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exportar Datos");
+        alert.setHeaderText("Funcionalidad de exportación");
+        alert.setContentText("La exportación de datos será implementada próximamente.\n\n" +
+                           "Formatos disponibles próximamente:\n" +
+                           "• Excel (.xlsx)\n" +
+                           "• PDF\n" +
+                           "• CSV");
+        alert.showAndWait();
+    }
+
+    // ====================================================================
+    // MÉTODOS AUXILIARES
+    // ====================================================================
 
     /**
      * Construye un texto detallado con toda la información del equipo.

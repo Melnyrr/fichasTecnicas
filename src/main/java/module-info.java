@@ -1,22 +1,17 @@
 module starter {
-
-    // --- Módulos Requeridos ---
     requires javafx.controls;
     requires javafx.fxml;
-    requires atlantafx.base; // Este ya lo tenías, está correcto
-    requires org.kordamp.ikonli.javafx;
+    requires atlantafx.base;
     requires java.sql;
-    // Kordamp - Estos ya los tenías, están correctos
-    requires org.kordamp.ikonli.core;
-    requires org.kordamp.ikonli.materialdesign2;
     
-    // --- Exportar y Abrir Paquetes ---
-    // Exporta el paquete principal para que la aplicación pueda  ser lanzada
-    exports starter;
+    // Ikonli requirements for icons
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.materialdesign2;
 
-    // ¡ESTAS SON LAS LÍNEAS QUE FALTABAN!
-    // Abren tus paquetes al módulo de FXML para que pueda acceder a tus controladores.
     opens starter to javafx.fxml;
     opens starter.ui to javafx.fxml;
-    opens starter.model to javafx.base, javafx.fxml;
+    opens starter.model to javafx.base;
+    
+    exports starter;
 }
