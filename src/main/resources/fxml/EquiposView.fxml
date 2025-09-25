@@ -22,8 +22,9 @@
         <Label text="Administra el inventario y estado de todos los equipos tecnológicos" styleClass="view-subtitle"/>
     </VBox>
     
-    <!-- Action Buttons con iconos -->
+    <!-- Action Buttons con iconos y botón de columnas alineado -->
     <HBox spacing="12" styleClass="action-buttons">
+        <!-- Botones principales -->
         <Button fx:id="agregarBtn" styleClass="success" minWidth="50" minHeight="36">
             <graphic>
                 <FontIcon iconLiteral="mdi2p-plus" iconSize="16"/>
@@ -63,7 +64,7 @@
         <!-- Separador visual -->
         <Label style="-fx-min-width: 20px;"/>
         
-        <!-- Botones adicionales para otras acciones -->
+        <!-- Botones adicionales -->
         <Button fx:id="refreshBtn" styleClass="secondary" minWidth="50" minHeight="36">
             <graphic>
                 <FontIcon iconLiteral="mdi2r-refresh" iconSize="16"/>
@@ -81,10 +82,23 @@
                 <Tooltip text="Exportar datos"/>
             </tooltip>
         </Button>
+        
+        <!-- Spacer para empujar el botón de columnas al extremo derecho -->
+        <HBox HBox.hgrow="ALWAYS"/>
+        
+        <!-- Botón de columnas alineado horizontalmente -->
+        <Button fx:id="columnToggleBtn" styleClass="secondary, column-toggle-btn" minWidth="50" minHeight="36">
+            <graphic>
+                <FontIcon iconLiteral="mdi2t-table-headers-eye" iconSize="16"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Mostrar/Ocultar columnas"/>
+            </tooltip>
+        </Button>
     </HBox>
     
-    <!-- Equipment Table -->
-    <VBox VBox.vgrow="ALWAYS" spacing="10" styleClass="table-container">
+    <!-- Equipment Table sin header extra -->
+    <VBox VBox.vgrow="ALWAYS" spacing="10" styleClass="table-container">        
         <TableView fx:id="equiposTable" VBox.vgrow="ALWAYS" styleClass="data-table">
             <columns>
                 <!-- Columnas principales (siempre visibles) -->

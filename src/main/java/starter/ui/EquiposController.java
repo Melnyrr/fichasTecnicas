@@ -3,21 +3,22 @@ package starter.ui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Alert;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import starter.dao.EquipoDAO;
 import starter.model.Equipo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * Controlador completo para la vista de gestión de equipos con botones de iconos.
- * Incluye todas las columnas disponibles en la base de datos.
+ * Controlador completo para la vista de gestión de equipos con control de columnas.
  */
 public class EquiposController {
 
@@ -46,6 +47,7 @@ public class EquiposController {
     // Botones adicionales
     @FXML private Button refreshBtn;
     @FXML private Button exportBtn;
+    @FXML private Button columnToggleBtn;
 
     // Labels de estado
     @FXML private Label totalEquiposLabel;
@@ -56,15 +58,23 @@ public class EquiposController {
     // DAO y datos
     private EquipoDAO equipoDAO;
     private ObservableList<Equipo> equiposData;
+    
+    // Control de columnas
+    private Map<String, TableColumn<Equipo, ?>> columnMap;
+    private Map<String, Boolean> columnVisibility;
+    private Popup columnMenuPopup;
 
     public EquiposController() {
         this.equipoDAO = new EquipoDAO();
         this.equiposData = FXCollections.observableArrayList();
+        this.columnMap = new LinkedHashMap<>();
+        this.columnVisibility = new HashMap<>();
     }
 
     @FXML
     private void initialize() {
         setupTableColumns();
+        setupColumnControl();
         setupTable();
         setupButtons();
         loadEquipos();
@@ -72,8 +82,228 @@ public class EquiposController {
     }
 
     /**
-     * Configura todas las columnas de la tabla vinculándolas con las
-     * propiedades del modelo.
+     * Configura el control de visibilidad de columnas.
+     */
+    private void setupColumnControl() {
+        // Mapear columnas con nombres descriptivos
+        columnMap.put("ID", idColumn);
+        columnMap.put("Tipo de Equipo", tipoEquipoColumn);
+        columnMap.put("Nombre", nombreColumn);
+        columnMap.put("Marca", marcaColumn);
+        columnMap.put("Modelo", modeloColumn);
+        columnMap.put("Número de Serie", serialColumn);
+        columnMap.put("Código Interno", codigoInternoColumn);
+        columnMap.put("Interfaces", interfazColumn);
+        columnMap.put("Ubicación", ubicacionColumn);
+        columnMap.put("Proveedor", proveedorColumn);
+        columnMap.put("Fecha de Compra", fechaColumn);
+        columnMap.put("Estado", estadoColumn);
+        columnMap.put("Referencia/Manual", referenciaPartesColumn);
+
+        // Inicializar visibilidad (todas visibles por defecto)
+        columnMap.forEach((name, column) -> {
+            columnVisibility.put(name, true);
+        });
+
+        // Configurar evento del botón
+        columnToggleBtn.setOnAction(e -> showColumnMenu());
+    }
+
+    /**
+     * Muestra el menú desplegable para controlar columnas.
+     */
+    private void showColumnMenu() {
+        if (columnMenuPopup != null && columnMenuPopup.isShowing()) {
+            columnMenuPopup.hide();
+            return;
+        }
+
+        // Crear el popup
+        columnMenuPopup = new Popup();
+        columnMenuPopup.setAutoHide(true);
+        columnMenuPopup.setHideOnEscape(true);
+
+        // Crear contenido del menú
+        VBox menuContent = createColumnMenu();
+        
+        columnMenuPopup.getContent().add(menuContent);
+        
+        // Mostrar el popup debajo del botón
+        var bounds = columnToggleBtn.localToScreen(columnToggleBtn.getBoundsInLocal());
+        columnMenuPopup.show(
+            columnToggleBtn.getScene().getWindow(),
+            bounds.getMinX(),
+            bounds.getMaxY() + 5
+        );
+    }
+
+    /**
+     * Crea el contenido del menú de columnas.
+     */
+    private VBox createColumnMenu() {
+        VBox menu = new VBox(4); // Spacing reducido
+        menu.setPadding(new Insets(8)); // Padding reducido
+        menu.getStyleClass().addAll("column-menu", "elevation-2");
+        menu.setMinWidth(200);
+
+        // Título del menú
+        Label title = new Label("Mostrar/Ocultar Columnas");
+        title.getStyleClass().add("column-menu-title");
+        menu.getChildren().add(title);
+
+        // Separador
+        Separator separator = new Separator();
+        separator.getStyleClass().add("column-menu-separator");
+        menu.getChildren().add(separator);
+
+        // Crear checkboxes para cada columna con área clickeable completa
+        columnMap.forEach((columnName, column) -> {
+            CheckBox checkBox = new CheckBox(columnName);
+            checkBox.setSelected(columnVisibility.get(columnName));
+            checkBox.getStyleClass().add("column-menu-checkbox");
+            
+            // IMPORTANTE: Hacer que el checkbox ocupe toda la anchura
+            checkBox.setMaxWidth(Double.MAX_VALUE);
+            checkBox.setPrefWidth(200);
+            
+            // Deshabilitar columnas esenciales
+            if ("ID".equals(columnName) || "Nombre".equals(columnName) || "Tipo de Equipo".equals(columnName)) {
+                checkBox.setDisable(true);
+                checkBox.setSelected(true);
+            }
+            
+            checkBox.setOnAction(e -> {
+                boolean visible = checkBox.isSelected();
+                columnVisibility.put(columnName, visible);
+                toggleColumnVisibility(column, visible);
+                updateColumnInfo();
+            });
+            
+            menu.getChildren().add(checkBox);
+        });
+
+        // Separador para botones de acción
+        Separator actionSeparator = new Separator();
+        actionSeparator.getStyleClass().add("column-menu-separator");
+        menu.getChildren().add(actionSeparator);
+
+        // Botón mostrar todas - más compacto
+        Button showAllBtn = new Button("Mostrar Todas");
+        showAllBtn.getStyleClass().addAll("column-menu-button", "success");
+        showAllBtn.setMaxWidth(Double.MAX_VALUE);
+        showAllBtn.setOnAction(e -> {
+            showAllColumns();
+            columnMenuPopup.hide();
+        });
+
+        // Botón mostrar solo básicas - más compacto
+        Button showBasicBtn = new Button("Solo Básicas");
+        showBasicBtn.getStyleClass().addAll("column-menu-button", "secondary");
+        showBasicBtn.setMaxWidth(Double.MAX_VALUE);
+        showBasicBtn.setOnAction(e -> {
+            showBasicColumns();
+            columnMenuPopup.hide();
+        });
+
+        menu.getChildren().addAll(showAllBtn, showBasicBtn);
+
+        return menu;
+    }
+
+    /**
+     * Alterna la visibilidad de una columna.
+     */
+    private void toggleColumnVisibility(TableColumn<Equipo, ?> column, boolean visible) {
+        if (visible) {
+            if (!equiposTable.getColumns().contains(column)) {
+                // Encontrar la posición correcta para insertar la columna
+                insertColumnInCorrectPosition(column);
+            }
+        } else {
+            equiposTable.getColumns().remove(column);
+        }
+    }
+
+    /**
+     * Inserta una columna en su posición correcta según el orden original.
+     */
+    private void insertColumnInCorrectPosition(TableColumn<Equipo, ?> columnToInsert) {
+        var allColumns = columnMap.values().toArray(new TableColumn[0]);
+        var visibleColumns = equiposTable.getColumns();
+        
+        // Encontrar el índice correcto
+        int targetIndex = 0;
+        for (TableColumn<Equipo, ?> col : allColumns) {
+            if (col == columnToInsert) {
+                break;
+            }
+            if (visibleColumns.contains(col)) {
+                targetIndex++;
+            }
+        }
+        
+        // Insertar en la posición correcta
+        if (targetIndex >= visibleColumns.size()) {
+            visibleColumns.add(columnToInsert);
+        } else {
+            visibleColumns.add(targetIndex, columnToInsert);
+        }
+    }
+
+    /**
+     * Muestra todas las columnas.
+     */
+    private void showAllColumns() {
+        columnMap.forEach((name, column) -> {
+            columnVisibility.put(name, true);
+            if (!equiposTable.getColumns().contains(column)) {
+                insertColumnInCorrectPosition(column);
+            }
+        });
+        updateColumnInfo();
+    }
+
+    /**
+     * Muestra solo las columnas básicas.
+     */
+    private void showBasicColumns() {
+        String[] basicColumns = {"ID", "Tipo de Equipo", "Nombre", "Marca", "Modelo", "Estado"};
+        
+        // Ocultar todas primero
+        equiposTable.getColumns().clear();
+        
+        // Mostrar solo las básicas
+        for (String columnName : basicColumns) {
+            TableColumn<Equipo, ?> column = columnMap.get(columnName);
+            if (column != null) {
+                equiposTable.getColumns().add(column);
+                columnVisibility.put(columnName, true);
+            }
+        }
+        
+        // Marcar el resto como ocultas
+        columnMap.forEach((name, column) -> {
+            if (!java.util.Arrays.asList(basicColumns).contains(name)) {
+                columnVisibility.put(name, false);
+            }
+        });
+        
+        updateColumnInfo();
+    }
+
+    /**
+     * Actualiza la información sobre columnas visibles.
+     */
+    private void updateColumnInfo() {
+        long visibleCount = columnVisibility.values().stream().mapToLong(v -> v ? 1 : 0).sum();
+        long totalCount = columnMap.size();
+        
+        columnaInfoLabel.setText(String.format("Columnas visibles: %d de %d - Usa scroll horizontal para navegar", 
+                                               visibleCount, totalCount));
+    }
+
+    /**
+     * Configura todas las columnas de la tabla vinculándolas con las propiedades del modelo.
      */
     private void setupTableColumns() {
         // Columnas principales
@@ -97,7 +327,7 @@ public class EquiposController {
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
         referenciaPartesColumn.setCellValueFactory(new PropertyValueFactory<>("referenciaPartes"));
 
-        // Formateo personalizado para algunas columnas
+        // Formateo personalizado
         setupCustomCellFormatting();
     }
 
@@ -107,7 +337,7 @@ public class EquiposController {
     private void setupCustomCellFormatting() {
         // Columna ID - centrar
         idColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, Integer>() {
+            return new TableCell<Equipo, Integer>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
@@ -123,7 +353,7 @@ public class EquiposController {
 
         // Columna de fecha - formatear y centrar
         fechaColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, LocalDate>() {
+            return new TableCell<Equipo, LocalDate>() {
                 private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                 @Override
@@ -142,7 +372,7 @@ public class EquiposController {
 
         // Columna de estado - aplicar estilos según el valor
         estadoColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, String>() {
+            return new TableCell<Equipo, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -153,7 +383,6 @@ public class EquiposController {
                         setText(item);
                         setStyle("-fx-alignment: CENTER;");
 
-                        // Aplicar estilos según el estado
                         getStyleClass().removeAll("equipment-status-active", "equipment-status-maintenance", "equipment-status-inactive");
                         switch (item.toLowerCase()) {
                             case "activo":
@@ -173,7 +402,7 @@ public class EquiposController {
 
         // Columna de tipo de equipo - aplicar estilo
         tipoEquipoColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, String>() {
+            return new TableCell<Equipo, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -189,7 +418,7 @@ public class EquiposController {
 
         // Columna de interfaces - ajustar texto largo
         interfazColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, String>() {
+            return new TableCell<Equipo, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -199,7 +428,7 @@ public class EquiposController {
                     } else {
                         if (item.length() > 15) {
                             setText(item.substring(0, 12) + "...");
-                            setTooltip(new javafx.scene.control.Tooltip(item));
+                            setTooltip(new Tooltip(item));
                         } else {
                             setText(item);
                             setTooltip(null);
@@ -211,7 +440,7 @@ public class EquiposController {
 
         // Similar para referencia de partes
         referenciaPartesColumn.setCellFactory(column -> {
-            return new javafx.scene.control.TableCell<Equipo, String>() {
+            return new TableCell<Equipo, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -221,7 +450,7 @@ public class EquiposController {
                     } else {
                         if (item.length() > 20) {
                             setText(item.substring(0, 17) + "...");
-                            setTooltip(new javafx.scene.control.Tooltip(item));
+                            setTooltip(new Tooltip(item));
                         } else {
                             setText(item);
                             setTooltip(null);
@@ -247,13 +476,14 @@ public class EquiposController {
             }
         );
 
-        // Deshabilitar botones que requieren selección inicialmente
         editarBtn.setDisable(true);
         eliminarBtn.setDisable(true);
         verDetalleBtn.setDisable(true);
 
         equiposTable.setPlaceholder(new Label("No hay equipos registrados"));
         equiposTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        
+        updateColumnInfo();
     }
 
     /**
@@ -316,7 +546,7 @@ public class EquiposController {
     }
 
     // ====================================================================
-    // MANEJADORES DE EVENTOS DE BOTONES PRINCIPALES
+    // MANEJADORES DE EVENTOS DE BOTONES
     // ====================================================================
 
     @FXML
@@ -356,7 +586,7 @@ public class EquiposController {
                     + equipoSeleccionado.getModelo() + ")");
 
             confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == javafx.scene.control.ButtonType.OK) {
+                if (response == ButtonType.OK) {
                     if (equipoDAO.deleteEquipo(equipoSeleccionado.getId())) {
                         equiposData.remove(equipoSeleccionado);
                         updateStatusLabels();
@@ -395,17 +625,12 @@ public class EquiposController {
         }
     }
 
-    // ====================================================================
-    // MANEJADORES DE EVENTOS DE BOTONES ADICIONALES
-    // ====================================================================
-
     @FXML
     private void handleRefresh() {
         System.out.println("Actualizando lista de equipos...");
         loadEquipos();
         updateStatusLabels();
         
-        // Mostrar feedback visual opcional
         Alert info = new Alert(Alert.AlertType.INFORMATION);
         info.setTitle("Actualización");
         info.setHeaderText("Lista actualizada");
@@ -473,5 +698,25 @@ public class EquiposController {
      */
     public Equipo getSelectedEquipo() {
         return equiposTable.getSelectionModel().getSelectedItem();
+    }
+
+    /**
+     * Obtiene el estado actual de visibilidad de columnas.
+     */
+    public Map<String, Boolean> getColumnVisibility() {
+        return new HashMap<>(columnVisibility);
+    }
+
+    /**
+     * Restaura el estado de visibilidad de columnas.
+     */
+    public void setColumnVisibility(Map<String, Boolean> visibility) {
+        visibility.forEach((columnName, visible) -> {
+            if (columnMap.containsKey(columnName)) {
+                columnVisibility.put(columnName, visible);
+                toggleColumnVisibility(columnMap.get(columnName), visible);
+            }
+        });
+        updateColumnInfo();
     }
 }
