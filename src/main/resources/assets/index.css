@@ -1,3 +1,29 @@
+/*
+ * Copyright (c) 2023.
+ * Este código es un proyecto de práctica y se proporciona con fines educativos únicamente.
+ * No se otorga ninguna garantía de ningún tipo, expresa o implícita, con respecto al uso o la
+ * idoneidad de este código para ningún propósito particular.
+ *
+ * Se concede permiso para usar, copiar, modificar y distribuir este código y su documentación
+ * para cualquier propósito, sin cargo, siempre que se mantenga este aviso de copyright
+ * y la nota de exención de responsabilidad en todas las copias.
+ */
+
+/* ====================================================================
+   VARIABLES PERSONALIZADAS COMPLEMENTARIAS (NO SOBRESCRIBEN ATLANTAFX)
+   ==================================================================== */
+
+.root {
+    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    /* Definir solo la variable faltante que causaba errores */
+    -color-attention-emphasis: -color-warning-emphasis;
+}
+
+.view-title,
+.view-subtitle {
+    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
 /* ====================================================================
    HEADER DE TABLA CON BOTÓN DE COLUMNAS
    ==================================================================== */
@@ -24,10 +50,6 @@
     -fx-padding: 8 12;
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-scale-x 0.15s ease-out,
-        -fx-scale-y 0.15s ease-out;
 }
 
 .column-toggle-btn:hover {
@@ -62,12 +84,12 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
     -fx-padding: 12;
     -fx-spacing: 6;
-    -fx-min-width: 240; /* Aumentado para acomodar fuentes más grandes */
+    -fx-min-width: 240;
     -fx-max-width: 300;
 }
 
 .column-menu-title {
-    -fx-font-size: 15px; /* Era 14px */
+    -fx-font-size: 15px;
     -fx-font-weight: 600;
     -fx-text-fill: -color-fg-default;
     -fx-padding: 4 8 8 8;
@@ -84,16 +106,15 @@
 
 /* Checkboxes del menú - FUENTES AUMENTADAS */
 .column-menu-checkbox {
-    -fx-font-size: 14px; /* Era 13px */
+    -fx-font-size: 14px;
     -fx-text-fill: -color-fg-default;
     -fx-padding: 8 12;
     -fx-spacing: 10;
     -fx-cursor: hand;
     -fx-background-radius: 4;
-    -fx-transition: -fx-background-color 0.2s ease-out;
     -fx-alignment: CENTER_LEFT;
     -fx-max-width: Infinity;
-    -fx-min-height: 34px; /* Era 32px - aumentado para fuente más grande */
+    -fx-min-height: 34px;
     -fx-pref-height: 34px;
 }
 
@@ -123,7 +144,7 @@
     -fx-border-width: 1.5;
     -fx-border-radius: 3;
     -fx-background-radius: 3;
-    -fx-min-width: 17px; /* Era 16px */
+    -fx-min-width: 17px;
     -fx-min-height: 17px;
     -fx-max-width: 17px;
     -fx-max-height: 17px;
@@ -155,98 +176,15 @@
 
 /* Botones de acción rápida - FUENTES AUMENTADAS */
 .column-menu-button {
-    -fx-font-size: 14px; /* Era 13px */
+    -fx-font-size: 14px;
     -fx-font-weight: 500;
-    -fx-min-height: 34px; /* Era 32px */
+    -fx-min-height: 34px;
     -fx-max-height: 34px;
     -fx-cursor: hand;
     -fx-background-radius: 4;
     -fx-border-radius: 4;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
     -fx-alignment: CENTER;
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-scale-x 0.1s ease-out,
-        -fx-scale-y 0.1s ease-out;
-    -fx-padding: 0 12;
-}
-
-.column-menu-button:hover {
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 2, 0, 0, 1);
-}
-
-.column-menu-button:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 1, 0, 0, 0);
-}
-
-.column-menu-button.success {
-    -fx-background-color: -color-success-emphasis;
-    -fx-text-fill: white;
-    -fx-border-color: transparent;
-}
-
-.column-menu-button.success:hover {
-    -fx-background-color: derive(-color-success-emphasis, -8%);
-}
-
-.column-menu-button.secondary {
-    -fx-background-color: -color-bg-muted;
-    -fx-text-fill: -color-fg-default;
-    -fx-border-color: -color-border-default;
-    -fx-border-width: 1;
-}
-
-.column-menu-button.secondary:hover {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-muted;
-}
-    -fx-max-width: 16px;
-    -fx-max-height: 16px;
-}
-
-.column-menu-checkbox .check-box:selected .box {
-    -fx-background-color: -color-accent-emphasis;
-    -fx-border-color: -color-accent-emphasis;
-}
-
-.column-menu-checkbox .check-box:selected .mark {
-    -fx-background-color: white;
-    -fx-shape: "M2,5 L6,9 L14,1";
-    -fx-scale-shape: true;
-    -fx-scale-x: 0.9;
-    -fx-scale-y: 0.9;
-}
-
-.column-menu-checkbox .check-box:hover .box {
-    -fx-border-color: -color-accent-emphasis;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
-}
-
-.column-menu-checkbox .check-box:disabled .box {
-    -fx-background-color: derive(-color-bg-muted, 20%);
-    -fx-border-color: -color-border-muted;
-    -fx-opacity: 0.7;
-}
-
-/* Botones de acción rápida - TAMAÑO ESTÁNDAR */
-.column-menu-button {
-    -fx-font-size: 13px; /* Mismo que botones principales */
-    -fx-font-weight: 500;
-    -fx-min-height: 32px; /* Altura estándar de botones secundarios */
-    -fx-max-height: 32px;
-    -fx-cursor: hand;
-    -fx-background-radius: 4;
-    -fx-border-radius: 4;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 1, 0, 0, 1);
-    -fx-alignment: CENTER;
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-scale-x 0.1s ease-out,
-        -fx-scale-y 0.1s ease-out;
     -fx-padding: 0 12;
 }
 
@@ -416,9 +354,6 @@
     -fx-text-fill: -color-fg-default;
     -fx-prompt-text-fill: -color-fg-muted;
     -fx-cursor: text;
-    -fx-transition: 
-        -fx-border-color 0.2s ease-out,
-        -fx-effect 0.2s ease-out;
 }
 
 .form-input:focused {
@@ -443,9 +378,6 @@
     -fx-text-fill: -color-fg-default;
     -fx-prompt-text-fill: -color-fg-muted;
     -fx-cursor: text;
-    -fx-transition: 
-        -fx-border-color 0.2s ease-out,
-        -fx-effect 0.2s ease-out;
 }
 
 .form-textarea:focused {
@@ -484,11 +416,6 @@
     -fx-background-radius: 6;
     -fx-border-radius: 6;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-scale-x 0.1s ease-out,
-        -fx-scale-y 0.1s ease-out,
-        -fx-effect 0.2s ease-out;
 }
 
 .form-actions .button:hover {
@@ -583,28 +510,6 @@
 .root:dark .form-input:focused, .root:dark .form-textarea:focused {
     -fx-background-color: derive(-color-bg-default, -3%);
     -fx-border-color: derive(-color-accent-emphasis, 10%);
-}/*
- * Copyright (c) 2023.
- * Este código es un proyecto de práctica y se proporciona con fines educativos únicamente.
- * No se otorga ninguna garantía de ningún tipo, expresa o implícita, con respecto al uso o la
- * idoneidad de este código para ningún propósito particular.
- *
- * Se concede permiso para usar, copiar, modificar y distribuir este código y su documentación
- * para cualquier propósito, sin cargo, siempre que se mantenga este aviso de copyright
- * y la nota de exención de responsabilidad en todas las copias.
- */
-
-/* ====================================================================
-   VARIABLES PERSONALIZADAS
-   ==================================================================== */
-
-.root {
-    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;;
-}
-
-.view-title,
-.view-subtitle {
-    -fx-font-family: "Inter", "Helvetica Neue", Arial, sans-serif;;
 }
 
 /* ====================================================================
@@ -612,20 +517,20 @@
    ==================================================================== */
 
 .app-title {
-    -fx-font-size: 22px; /* Era 20px */
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: -color-fg-default;
 }
 
 .view-title {
-    -fx-font-size: 26px; /* Era 24px */
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: -color-fg-default;
     -fx-padding: 0 0 5 0;
 }
 
 .view-subtitle {
-    -fx-font-size: 15px; /* Era 14px */
+    -fx-font-size: 15px;
     -fx-text-fill: -color-fg-muted;
     -fx-wrap-text: true;
 }
@@ -649,7 +554,7 @@
 .action-buttons .button {
     -fx-min-height: 38px;
     -fx-min-width: 50px;
-    -fx-font-size: 14px; /* Era 13px */
+    -fx-font-size: 14px;
     -fx-font-weight: 500;
     -fx-cursor: hand;
     -fx-background-radius: 8;
@@ -661,16 +566,7 @@
 /* Asegurar que los iconos se vean bien */
 .action-buttons .button .ikonli-font-icon {
     -fx-icon-color: inherit;
-    -fx-icon-size: 17px; /* Era 16px */
-}
-
-/* Transiciones suaves para botones con iconos */
-.action-buttons .button {
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-effect 0.2s ease-out,
-        -fx-scale-x 0.15s ease-out,
-        -fx-scale-y 0.15s ease-out;
+    -fx-icon-size: 17px;
 }
 
 /* Botón Success (Verde) con efectos mejorados */
@@ -845,7 +741,7 @@
     -fx-border-color: -color-border-muted;
     -fx-border-width: 0 1 0 0;
     -fx-font-weight: 600;
-    -fx-font-size: 14px; /* Agregado: Era implícito, ahora 14px */
+    -fx-font-size: 14px;
     -fx-text-fill: -color-fg-default;
     -fx-padding: 12 8 12 8;
 }
@@ -860,8 +756,8 @@
     -fx-border-width: 0 0 1 0;
     -fx-text-fill: -color-fg-default;
     -fx-background-color: transparent;
-    -fx-alignment: CENTER_LEFT;
-    -fx-font-size: 14px; /* Era implícito, ahora 14px */
+    -fx-alignment: CENTER_LEFT; /* Cambio aquí: de CENTER_LEFT se mantiene */
+    -fx-font-size: 14px;
 }
 
 .data-table .table-row-cell {
@@ -895,24 +791,24 @@
 }
 
 .status-text {
-    -fx-font-size: 13px; /* Era 12px */
+    -fx-font-size: 13px;
     -fx-text-fill: -color-fg-default;
     -fx-font-weight: 500;
 }
 
 .status-text-secondary {
-    -fx-font-size: 13px; /* Era 12px */
+    -fx-font-size: 13px;
     -fx-text-fill: -color-fg-muted;
 }
 
 .status-text-warning {
-    -fx-font-size: 13px; /* Era 12px */
-    -fx-text-fill: -color-attention-emphasis;
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-warning-emphasis;
     -fx-font-weight: 500;
 }
 
 .status-text-info {
-    -fx-font-size: 12px; /* Era 11px */
+    -fx-font-size: 12px;
     -fx-text-fill: derive(-color-fg-muted, 10%);
     -fx-font-style: italic;
 }
@@ -920,12 +816,12 @@
 /* Iconos en barra de estado */
 .status-icon {
     -fx-icon-color: -color-fg-default;
-    -fx-icon-size: 15px; /* Era 14px */
+    -fx-icon-size: 15px;
 }
 
 .status-icon-muted {
     -fx-icon-color: -color-fg-muted;
-    -fx-icon-size: 13px; /* Era 12px */
+    -fx-icon-size: 13px;
 }
 
 /* ====================================================================
@@ -989,20 +885,20 @@
 }
 
 .sidebar-logo-icon {
-    -fx-font-size: 30px; /* Era 28px */
+    -fx-font-size: 30px;
     -fx-text-fill: -color-accent-emphasis;
     -fx-min-width: 32px;
 }
 
 .sidebar-app-name {
-    -fx-font-size: 20px; /* Era 18px */
+    -fx-font-size: 20px;
     -fx-font-weight: 700;
     -fx-text-fill: -color-fg-default;
     -fx-wrap-text: false;
 }
 
 .sidebar-app-subtitle {
-    -fx-font-size: 14px; /* Era 13px */
+    -fx-font-size: 14px;
     -fx-font-weight: 500;
     -fx-text-fill: -color-fg-muted;
     -fx-wrap-text: false;
@@ -1021,7 +917,7 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-padding: 8 12;
-    -fx-font-size: 14px; /* Era 13px */
+    -fx-font-size: 14px;
     -fx-text-fill: -color-fg-default;
     -fx-cursor: hand;
     -fx-min-height: 40px;
@@ -1062,7 +958,7 @@
     -fx-border-radius: 0;
     -fx-padding: 18 24 18 24;
     -fx-alignment: CENTER_LEFT;
-    -fx-font-size: 16px; /* Era 15px */
+    -fx-font-size: 16px;
     -fx-font-weight: 500;
     -fx-text-fill: -color-fg-default;
     -fx-cursor: hand;
@@ -1140,33 +1036,6 @@
 }
 
 /* ====================================================================
-   TRANSICIONES
-   ==================================================================== */
-
-.nav-button {
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
-    -fx-transition:
-        -fx-background-color 0.15s ease-out,
-        -fx-text-fill 0.15s ease-out,
-        -fx-font-weight 0.1s ease-out;
-}
-
-.theme-switcher-button {
-    -fx-transition:
-        -fx-background-color 0.2s ease-out,
-        -fx-border-color 0.2s ease-out;
-}
-
-.data-table .table-row-cell {
-    -fx-transition: -fx-background-color 0.2s ease;
-}
-
-.data-table .table-cell {
-    -fx-transition: -fx-background-color 0.15s ease-out;
-}
-
-/* ====================================================================
    SEPARADORES VISUALES
    ==================================================================== */
 
@@ -1219,8 +1088,8 @@
 }
 
 .equipment-status-maintenance {
-    -fx-background-color: derive(-color-attention-emphasis, 80%);
-    -fx-text-fill: derive(-color-attention-emphasis, -30%);
+    -fx-background-color: derive(-color-warning-emphasis, 80%);
+    -fx-text-fill: derive(-color-warning-emphasis, -30%);
     -fx-font-weight: bold;
     -fx-background-radius: 4;
     -fx-padding: 2px 8px;
@@ -1232,14 +1101,6 @@
     -fx-font-weight: bold;
     -fx-background-radius: 4;
     -fx-padding: 2px 8px;
-}
-
-.equipment-status-active,
-.equipment-status-maintenance,
-.equipment-status-inactive {
-    -fx-transition: 
-        -fx-background-color 0.2s ease-out,
-        -fx-text-fill 0.2s ease-out;
 }
 
 /* Tipos de equipo con estilos específicos */
@@ -1616,8 +1477,8 @@
 }
 
 .root:dark .equipment-status-maintenance {
-    -fx-background-color: derive(-color-attention-emphasis, 60%);
-    -fx-text-fill: derive(-color-attention-emphasis, 40%);
+    -fx-background-color: derive(-color-warning-emphasis, 60%);
+    -fx-text-fill: derive(-color-warning-emphasis, 40%);
 }
 
 .root:dark .equipment-status-inactive {
@@ -1631,8 +1492,8 @@
 }
 
 .root:light .equipment-status-maintenance {
-    -fx-background-color: derive(-color-attention-emphasis, 90%);
-    -fx-text-fill: derive(-color-attention-emphasis, -40%);
+    -fx-background-color: derive(-color-warning-emphasis, 90%);
+    -fx-text-fill: derive(-color-warning-emphasis, -40%);
 }
 
 .root:light .equipment-status-inactive {
@@ -1743,4 +1604,127 @@
 
 .table-row-cell:selected .table-cell {
     -fx-text-fill: white;
+}
+
+/* ================================================================
+   ESTILOS PARA EL DIÁLOGO DE FORMULARIO DE EQUIPOS
+   ================================================================ */
+
+/* Contenedor del diálogo */
+.dialog-container {
+    -fx-background-color: -color-bg-default;
+    -fx-background-radius: 8px;
+}
+
+/* Título y subtítulo del diálogo */
+.dialog-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.dialog-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+/* Contenido del formulario */
+.form-content {
+    -fx-background-color: -color-bg-default;
+}
+
+/* Títulos de sección */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+    -fx-padding: 5 0 5 0;
+}
+
+/* Labels de formulario */
+.form-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -color-fg-default;
+    -fx-padding: 0 0 4 0;
+}
+
+/* Controles de formulario */
+.form-control {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 6px;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+.form-control:focused {
+    -fx-border-color: -color-accent-emphasis;
+    -fx-border-width: 2px;
+    -fx-background-color: -color-bg-default;
+    -fx-effect: dropshadow(gaussian, -color-accent-emphasis, 4, 0.3, 0, 0);
+}
+
+.form-control:hover {
+    -fx-border-color: -color-border-muted;
+    -fx-background-color: -color-bg-default;
+}
+
+/* TextArea específico */
+.form-control.text-area {
+    -fx-padding: 10px 12px;
+}
+
+.form-control.text-area .content {
+    -fx-background-color: transparent;
+}
+
+/* ComboBox */
+.form-control.combo-box {
+    -fx-background-color: -color-bg-subtle;
+}
+
+.form-control.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-fg-default;
+}
+
+/* DatePicker */
+.form-control.date-picker > .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* Labels de validación */
+.validation-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-danger-fg;
+    -fx-padding: 2 0 0 4;
+    -fx-font-style: italic;
+}
+
+/* Footer del diálogo */
+.dialog-footer {
+    -fx-padding: 15 0 0 0;
+}
+
+/* Nota de campos requeridos */
+.required-note {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-style: italic;
+}
+
+/* Botones del diálogo */
+.dialog-footer .button {
+    -fx-min-height: 36px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+}
+
+/* Estado de error para campos inválidos */
+.form-control.error {
+    -fx-border-color: -color-danger-emphasis !important;
+    -fx-border-width: 2px !important;
 }

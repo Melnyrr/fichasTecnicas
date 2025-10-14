@@ -2,6 +2,7 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
@@ -11,7 +12,12 @@
 <?import javafx.geometry.Insets?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.ui.EquiposController" spacing="15" styleClass="view-container">
+<VBox xmlns="http://javafx.com/javafx/22" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="starter.ui.EquiposController" 
+      spacing="15" 
+      styleClass="view-container">
+    
     <padding>
         <Insets top="25" right="25" bottom="20" left="25"/>
     </padding>
@@ -97,36 +103,51 @@
         </Button>
     </HBox>
     
-    <!-- Equipment Table sin header extra -->
-    <VBox VBox.vgrow="ALWAYS" spacing="10" styleClass="table-container">        
-        <TableView fx:id="equiposTable" VBox.vgrow="ALWAYS" styleClass="data-table">
-            <columns>
-                <!-- Columnas principales (siempre visibles) -->
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50" minWidth="40" maxWidth="60" resizable="false"/>
-                <TableColumn fx:id="tipoEquipoColumn" text="Tipo" prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="150" minWidth="120"/>
-                <TableColumn fx:id="marcaColumn" text="Marca" prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="modeloColumn" text="Modelo" prefWidth="120" minWidth="100"/>
-                
-                <!-- Información de identificación -->
-                <TableColumn fx:id="serialColumn" text="Número de Serie" prefWidth="130" minWidth="110"/>
-                <TableColumn fx:id="codigoInternoColumn" text="Código Interno" prefWidth="110" minWidth="90"/>
-                
-                <!-- Información técnica -->
-                <TableColumn fx:id="interfazColumn" text="Interfaces" prefWidth="120" minWidth="100"/>
-                
-                <!-- Información de ubicación y gestión -->
-                <TableColumn fx:id="ubicacionColumn" text="Ubicación" prefWidth="120" minWidth="100"/>
-                <TableColumn fx:id="proveedorColumn" text="Proveedor" prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="fechaColumn" text="Fecha de Compra" prefWidth="120" minWidth="100"/>
-                <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="referenciaPartesColumn" text="Referencia/Manual" prefWidth="150" minWidth="120"/>
-            </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-        </TableView>
-    </VBox>        
+    <!-- Main Content Area with Table and Drawer -->
+    <StackPane fx:id="stackContainer" VBox.vgrow="ALWAYS">
+        <!-- Table Container -->
+        <VBox fx:id="tableArea" spacing="10">
+            <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                <TableView fx:id="equiposTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <!-- Columnas principales (siempre visibles) -->
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="50" minWidth="40" maxWidth="60" resizable="false"/>
+                        <TableColumn fx:id="tipoEquipoColumn" text="Tipo" prefWidth="100" minWidth="80"/>
+                        <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="150" minWidth="120"/>
+                        <TableColumn fx:id="marcaColumn" text="Marca" prefWidth="100" minWidth="80"/>
+                        <TableColumn fx:id="modeloColumn" text="Modelo" prefWidth="120" minWidth="100"/>
+                        
+                        <!-- Información de identificación -->
+                        <TableColumn fx:id="serialColumn" text="Número de Serie" prefWidth="130" minWidth="110"/>
+                        <TableColumn fx:id="codigoInternoColumn" text="Código Interno" prefWidth="110" minWidth="90"/>
+                        
+                        <!-- Información técnica -->
+                        <TableColumn fx:id="interfazColumn" text="Interfaces" prefWidth="120" minWidth="100"/>
+                        
+                        <!-- Información de ubicación y gestión -->
+                        <TableColumn fx:id="ubicacionColumn" text="Ubicación" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="proveedorColumn" text="Proveedor" prefWidth="100" minWidth="80"/>
+                        <TableColumn fx:id="fechaColumn" text="Fecha de Compra" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="100" minWidth="80"/>
+                        <TableColumn fx:id="referenciaPartesColumn" text="Referencia/Manual" prefWidth="150" minWidth="120"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+        </VBox>
+        
+        <!-- Sliding Drawer Panel -->
+        <HBox fx:id="drawerPanel" 
+              styleClass="drawer-panel" 
+              translateX="700" 
+              visible="false">
+            <VBox fx:id="drawerContent" 
+                  styleClass="drawer-content" 
+                  prefWidth="600"/>
+        </HBox>
+    </StackPane>
     
     <!-- Status Bar -->
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="status-bar">

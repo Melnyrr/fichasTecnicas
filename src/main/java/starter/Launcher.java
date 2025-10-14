@@ -31,7 +31,7 @@ public class Launcher extends Application {
 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
-            var scene = new Scene(root, 1080, 720);
+            var scene = new Scene(root, 1280, 720);
             scene.getStylesheets().add(
                     Objects.requireNonNull(
                             getClass().getResource(ASSETS_DIR + "index.css")

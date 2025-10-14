@@ -18,47 +18,73 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Controlador completo para la vista de gestión de equipos con control de columnas.
+ * Controlador completo para la vista de gestión de equipos con control de
+ * columnas.
  */
 public class EquiposController {
 
     // Tabla y columnas
-    @FXML private TableView<Equipo> equiposTable;
-    @FXML private TableColumn<Equipo, Integer> idColumn;
-    @FXML private TableColumn<Equipo, String> tipoEquipoColumn;
-    @FXML private TableColumn<Equipo, String> nombreColumn;
-    @FXML private TableColumn<Equipo, String> marcaColumn;
-    @FXML private TableColumn<Equipo, String> modeloColumn;
-    @FXML private TableColumn<Equipo, String> serialColumn;
-    @FXML private TableColumn<Equipo, String> codigoInternoColumn;
-    @FXML private TableColumn<Equipo, String> interfazColumn;
-    @FXML private TableColumn<Equipo, String> ubicacionColumn;
-    @FXML private TableColumn<Equipo, String> proveedorColumn;
-    @FXML private TableColumn<Equipo, LocalDate> fechaColumn;
-    @FXML private TableColumn<Equipo, String> estadoColumn;
-    @FXML private TableColumn<Equipo, String> referenciaPartesColumn;
+    @FXML
+    private TableView<Equipo> equiposTable;
+    @FXML
+    private TableColumn<Equipo, Integer> idColumn;
+    @FXML
+    private TableColumn<Equipo, String> tipoEquipoColumn;
+    @FXML
+    private TableColumn<Equipo, String> nombreColumn;
+    @FXML
+    private TableColumn<Equipo, String> marcaColumn;
+    @FXML
+    private TableColumn<Equipo, String> modeloColumn;
+    @FXML
+    private TableColumn<Equipo, String> serialColumn;
+    @FXML
+    private TableColumn<Equipo, String> codigoInternoColumn;
+    @FXML
+    private TableColumn<Equipo, String> interfazColumn;
+    @FXML
+    private TableColumn<Equipo, String> ubicacionColumn;
+    @FXML
+    private TableColumn<Equipo, String> proveedorColumn;
+    @FXML
+    private TableColumn<Equipo, LocalDate> fechaColumn;
+    @FXML
+    private TableColumn<Equipo, String> estadoColumn;
+    @FXML
+    private TableColumn<Equipo, String> referenciaPartesColumn;
 
     // Botones principales con iconos
-    @FXML private Button agregarBtn;
-    @FXML private Button editarBtn;
-    @FXML private Button eliminarBtn;
-    @FXML private Button verDetalleBtn;
-    
+    @FXML
+    private Button agregarBtn;
+    @FXML
+    private Button editarBtn;
+    @FXML
+    private Button eliminarBtn;
+    @FXML
+    private Button verDetalleBtn;
+
     // Botones adicionales
-    @FXML private Button refreshBtn;
-    @FXML private Button exportBtn;
-    @FXML private Button columnToggleBtn;
+    @FXML
+    private Button refreshBtn;
+    @FXML
+    private Button exportBtn;
+    @FXML
+    private Button columnToggleBtn;
 
     // Labels de estado
-    @FXML private Label totalEquiposLabel;
-    @FXML private Label equiposActivosLabel;
-    @FXML private Label equiposMantenimientoLabel;
-    @FXML private Label columnaInfoLabel;
+    @FXML
+    private Label totalEquiposLabel;
+    @FXML
+    private Label equiposActivosLabel;
+    @FXML
+    private Label equiposMantenimientoLabel;
+    @FXML
+    private Label columnaInfoLabel;
 
     // DAO y datos
     private EquipoDAO equipoDAO;
     private ObservableList<Equipo> equiposData;
-    
+
     // Control de columnas
     private Map<String, TableColumn<Equipo, ?>> columnMap;
     private Map<String, Boolean> columnVisibility;
@@ -100,9 +126,18 @@ public class EquiposController {
         columnMap.put("Estado", estadoColumn);
         columnMap.put("Referencia/Manual", referenciaPartesColumn);
 
-        // Inicializar visibilidad (todas visibles por defecto)
+        // Definir columnas visibles inicialmente
+        String[] initiallyVisibleColumns = {"Nombre", "Marca", "Modelo", "Proveedor", "Fecha de Compra", "Estado"};
+
+        // Inicializar visibilidad
         columnMap.forEach((name, column) -> {
-            columnVisibility.put(name, true);
+            boolean visible = java.util.Arrays.asList(initiallyVisibleColumns).contains(name);
+            columnVisibility.put(name, visible);
+
+            // Ocultar columnas que no están en la lista inicial
+            if (!visible) {
+                equiposTable.getColumns().remove(column);
+            }
         });
 
         // Configurar evento del botón
@@ -125,15 +160,15 @@ public class EquiposController {
 
         // Crear contenido del menú
         VBox menuContent = createColumnMenu();
-        
+
         columnMenuPopup.getContent().add(menuContent);
-        
+
         // Mostrar el popup debajo del botón
         var bounds = columnToggleBtn.localToScreen(columnToggleBtn.getBoundsInLocal());
         columnMenuPopup.show(
-            columnToggleBtn.getScene().getWindow(),
-            bounds.getMinX(),
-            bounds.getMaxY() + 5
+                columnToggleBtn.getScene().getWindow(),
+                bounds.getMinX(),
+                bounds.getMaxY() + 5
         );
     }
 
@@ -161,24 +196,24 @@ public class EquiposController {
             CheckBox checkBox = new CheckBox(columnName);
             checkBox.setSelected(columnVisibility.get(columnName));
             checkBox.getStyleClass().add("column-menu-checkbox");
-            
+
             // IMPORTANTE: Hacer que el checkbox ocupe toda la anchura
             checkBox.setMaxWidth(Double.MAX_VALUE);
             checkBox.setPrefWidth(200);
-            
+
             // Deshabilitar columnas esenciales
             if ("ID".equals(columnName) || "Nombre".equals(columnName) || "Tipo de Equipo".equals(columnName)) {
                 checkBox.setDisable(true);
                 checkBox.setSelected(true);
             }
-            
+
             checkBox.setOnAction(e -> {
                 boolean visible = checkBox.isSelected();
                 columnVisibility.put(columnName, visible);
                 toggleColumnVisibility(column, visible);
                 updateColumnInfo();
             });
-            
+
             menu.getChildren().add(checkBox);
         });
 
@@ -230,7 +265,7 @@ public class EquiposController {
     private void insertColumnInCorrectPosition(TableColumn<Equipo, ?> columnToInsert) {
         var allColumns = columnMap.values().toArray(new TableColumn[0]);
         var visibleColumns = equiposTable.getColumns();
-        
+
         // Encontrar el índice correcto
         int targetIndex = 0;
         for (TableColumn<Equipo, ?> col : allColumns) {
@@ -241,7 +276,7 @@ public class EquiposController {
                 targetIndex++;
             }
         }
-        
+
         // Insertar en la posición correcta
         if (targetIndex >= visibleColumns.size()) {
             visibleColumns.add(columnToInsert);
@@ -267,12 +302,12 @@ public class EquiposController {
      * Muestra solo las columnas básicas.
      */
     private void showBasicColumns() {
-        String[] basicColumns = {"ID", "Tipo de Equipo", "Nombre", "Marca", "Modelo", "Estado"};
-        
+        String[] basicColumns = {"Nombre", "Marca", "Modelo", "Proveedor", "Fecha de Compra", "Estado"};
+
         // Ocultar todas primero
         equiposTable.getColumns().clear();
-        
-        // Mostrar solo las básicas
+
+        // Mostrar solo las básicas en el orden correcto
         for (String columnName : basicColumns) {
             TableColumn<Equipo, ?> column = columnMap.get(columnName);
             if (column != null) {
@@ -280,14 +315,14 @@ public class EquiposController {
                 columnVisibility.put(columnName, true);
             }
         }
-        
+
         // Marcar el resto como ocultas
         columnMap.forEach((name, column) -> {
             if (!java.util.Arrays.asList(basicColumns).contains(name)) {
                 columnVisibility.put(name, false);
             }
         });
-        
+
         updateColumnInfo();
     }
 
@@ -297,13 +332,14 @@ public class EquiposController {
     private void updateColumnInfo() {
         long visibleCount = columnVisibility.values().stream().mapToLong(v -> v ? 1 : 0).sum();
         long totalCount = columnMap.size();
-        
-        columnaInfoLabel.setText(String.format("Columnas visibles: %d de %d - Usa scroll horizontal para navegar", 
-                                               visibleCount, totalCount));
+
+        columnaInfoLabel.setText(String.format("Columnas visibles: %d de %d - Usa scroll horizontal para navegar",
+                visibleCount, totalCount));
     }
 
     /**
-     * Configura todas las columnas de la tabla vinculándolas con las propiedades del modelo.
+     * Configura todas las columnas de la tabla vinculándolas con las
+     * propiedades del modelo.
      */
     private void setupTableColumns() {
         // Columnas principales
@@ -468,12 +504,12 @@ public class EquiposController {
         equiposTable.setItems(equiposData);
 
         equiposTable.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldSelection, newSelection) -> {
-                boolean hasSelection = newSelection != null;
-                editarBtn.setDisable(!hasSelection);
-                eliminarBtn.setDisable(!hasSelection);
-                verDetalleBtn.setDisable(!hasSelection);
-            }
+                (observable, oldSelection, newSelection) -> {
+                    boolean hasSelection = newSelection != null;
+                    editarBtn.setDisable(!hasSelection);
+                    eliminarBtn.setDisable(!hasSelection);
+                    verDetalleBtn.setDisable(!hasSelection);
+                }
         );
 
         editarBtn.setDisable(true);
@@ -481,8 +517,10 @@ public class EquiposController {
         verDetalleBtn.setDisable(true);
 
         equiposTable.setPlaceholder(new Label("No hay equipos registrados"));
-        equiposTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        
+
+        // Cambiar a CONSTRAINED_RESIZE_POLICY para distribuir columnas automáticamente
+        equiposTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         updateColumnInfo();
     }
 
@@ -495,7 +533,7 @@ public class EquiposController {
         editarBtn.setOnAction(e -> handleEditarEquipo());
         eliminarBtn.setOnAction(e -> handleEliminarEquipo());
         verDetalleBtn.setOnAction(e -> handleVerDetalle());
-        
+
         // Botones adicionales
         refreshBtn.setOnAction(e -> handleRefresh());
         exportBtn.setOnAction(e -> handleExport());
@@ -548,7 +586,6 @@ public class EquiposController {
     // ====================================================================
     // MANEJADORES DE EVENTOS DE BOTONES
     // ====================================================================
-
     @FXML
     private void handleAgregarEquipo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -630,7 +667,7 @@ public class EquiposController {
         System.out.println("Actualizando lista de equipos...");
         loadEquipos();
         updateStatusLabels();
-        
+
         Alert info = new Alert(Alert.AlertType.INFORMATION);
         info.setTitle("Actualización");
         info.setHeaderText("Lista actualizada");
@@ -643,18 +680,17 @@ public class EquiposController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exportar Datos");
         alert.setHeaderText("Funcionalidad de exportación");
-        alert.setContentText("La exportación de datos será implementada próximamente.\n\n" +
-                           "Formatos disponibles próximamente:\n" +
-                           "• Excel (.xlsx)\n" +
-                           "• PDF\n" +
-                           "• CSV");
+        alert.setContentText("La exportación de datos será implementada próximamente.\n\n"
+                + "Formatos disponibles próximamente:\n"
+                + "• Excel (.xlsx)\n"
+                + "• PDF\n"
+                + "• CSV");
         alert.showAndWait();
     }
 
     // ====================================================================
     // MÉTODOS AUXILIARES
     // ====================================================================
-
     /**
      * Construye un texto detallado con toda la información del equipo.
      */
