@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="starter.ui.EquipoFormController" 
+      spacing="15" styleClass="view-container">
+    <padding>
+        <Insets top="25" right="40" bottom="20" left="25"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <VBox spacing="8" styleClass="header-section">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Button fx:id="backButton" styleClass="flat" minWidth="40" minHeight="40" onAction="#handleBack">
+                <graphic>
+                    <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20"/>
+                </graphic>
+            </Button>
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="formTitleLabel" text="Agregar Nuevo Equipo" styleClass="view-title"/>
+                <Label text="Complete la información del equipo tecnológico" styleClass="view-subtitle"/>
+            </VBox>
+        </HBox>
+    </VBox>
+    
+    <!-- Form Container with Scroll -->
+    <ScrollPane fx:id="formScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="form-scroll-pane">
+        <VBox spacing="25" styleClass="form-content">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="10"/>
+            </padding>
+            
+            <!-- Imagen Section -->
+            <VBox spacing="12" styleClass="form-section">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2i-image" iconSize="18" styleClass="section-icon"/>
+                    <Label text="Imagen del Equipo" styleClass="section-title"/>
+                </HBox>
+                <Separator/>
+                
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <!-- Image Preview -->
+                    <StackPane styleClass="image-preview-container" prefWidth="200" prefHeight="200">
+                        <ImageView fx:id="imagePreview" fitWidth="180" fitHeight="180" preserveRatio="true"/>
+                        <Label fx:id="noImageLabel" text="Sin imagen" styleClass="no-image-label"/>
+                    </StackPane>
+                    
+                    <!-- Image Controls -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="imagenField" promptText="Ruta de la imagen" styleClass="form-input"/>
+                        <HBox spacing="10">
+                            <Button fx:id="selectImageButton" text="Seleccionar Imagen" styleClass="outlined" onAction="#handleSelectImage">
+                                <graphic>
+                                    <FontIcon iconLiteral="mdi2f-folder-open" iconSize="14"/>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="clearImageButton" text="Limpiar" styleClass="outlined, danger" onAction="#handleClearImage">
+                                <graphic>
+                                    <FontIcon iconLiteral="mdi2c-close" iconSize="14"/>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                        <Label text="Formatos soportados: JPG, PNG, GIF" styleClass="hint-text"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <!-- Información Básica -->
+            <VBox spacing="12" styleClass="form-section">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2i-information" iconSize="18" styleClass="section-icon"/>
+                    <Label text="Información Básica" styleClass="section-title"/>
+                    <Label text="*" styleClass="required-asterisk"/>
+                </HBox>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="12" styleClass="form-grid">
+                    <!-- Row 1 -->
+                    <Label text="Tipo de Equipo *" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="tipoEquipoCombo" promptText="Seleccione tipo" GridPane.columnIndex="1" GridPane.rowIndex="0" 
+                              styleClass="form-input" maxWidth="Infinity"/>
+                    
+                    <Label text="Estado *" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="estadoCombo" promptText="Seleccione estado" GridPane.columnIndex="3" GridPane.rowIndex="0" 
+                              styleClass="form-input" maxWidth="Infinity"/>
+                    
+                    <!-- Row 2 -->
+                    <Label text="Nombre del Equipo *" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <TextField fx:id="nombreField" promptText="Ej: Computadora Dell Principal" GridPane.columnIndex="1" GridPane.rowIndex="1" 
+                               GridPane.columnSpan="3" styleClass="form-input"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Especificaciones Técnicas -->
+            <VBox spacing="12" styleClass="form-section">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2c-cog" iconSize="18" styleClass="section-icon"/>
+                    <Label text="Especificaciones Técnicas" styleClass="section-title"/>
+                </HBox>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="12" styleClass="form-grid">
+                    <!-- Row 1 -->
+                    <Label text="Marca" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="marcaField" promptText="Ej: Dell, HP, Lenovo" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-input"/>
+                    
+                    <Label text="Modelo" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="modeloField" promptText="Ej: Optiplex 7090" GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="form-input"/>
+                    
+                    <!-- Row 2 -->
+                    <Label text="Número de Serie" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <TextField fx:id="serieField" promptText="Ej: SN123456789" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-input"/>
+                    
+                    <Label text="Código Interno" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <TextField fx:id="codigoInternoField" promptText="Ej: EQ-001" GridPane.columnIndex="3" GridPane.rowIndex="1" styleClass="form-input"/>
+                    
+                    <!-- Row 3 -->
+                    <Label text="Interfaces" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="interfazField" promptText="Ej: USB 3.0, HDMI, Ethernet" GridPane.columnIndex="1" GridPane.rowIndex="2" 
+                               GridPane.columnSpan="3" styleClass="form-input"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Información de Compra y Ubicación -->
+            <VBox spacing="12" styleClass="form-section">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2m-map-marker" iconSize="18" styleClass="section-icon"/>
+                    <Label text="Compra y Ubicación" styleClass="section-title"/>
+                </HBox>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="12" styleClass="form-grid">
+                    <!-- Row 1 -->
+                    <Label text="Proveedor" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="proveedorField" promptText="Nombre del proveedor" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-input"/>
+                    
+                    <Label text="Fecha de Compra" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <DatePicker fx:id="fechaCompraPicker" promptText="dd/MM/yyyy" GridPane.columnIndex="3" GridPane.rowIndex="0" 
+                                styleClass="form-input" maxWidth="Infinity"/>
+                    
+                    <!-- Row 2 -->
+                    <Label text="Ubicación" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <TextField fx:id="ubicacionField" promptText="Ej: Oficina 201, Planta Baja" GridPane.columnIndex="1" GridPane.rowIndex="1" 
+                               GridPane.columnSpan="3" styleClass="form-input"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Información Adicional -->
+            <VBox spacing="12" styleClass="form-section">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2f-file-document" iconSize="18" styleClass="section-icon"/>
+                    <Label text="Información Adicional" styleClass="section-title"/>
+                </HBox>
+                <Separator/>
+                
+                <VBox spacing="8">
+                    <Label text="Referencias / Manual / Documentación" styleClass="form-label"/>
+                    <TextArea fx:id="referenciaPartesArea" promptText="Enlaces a manuales, documentación técnica, sitios web de referencia..." 
+                              styleClass="form-input" prefRowCount="4" wrapText="true"/>
+                </VBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+    
+    <!-- Action Buttons -->
+    <HBox spacing="12" alignment="CENTER_RIGHT" styleClass="form-actions">
+        <Button fx:id="cancelButton" text="Cancelar" styleClass="outlined" minWidth="100" onAction="#handleCancel">
+            <graphic>
+                <FontIcon iconLiteral="mdi2c-close" iconSize="14"/>
+            </graphic>
+        </Button>
+        <Button fx:id="saveButton" text="Guardar Equipo" styleClass="accent" minWidth="120" onAction="#handleSave">
+            <graphic>
+                <FontIcon iconLiteral="mdi2c-content-save" iconSize="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

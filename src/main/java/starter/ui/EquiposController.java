@@ -3,7 +3,9 @@ package starter.ui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
@@ -11,6 +13,7 @@ import javafx.stage.Popup;
 import starter.dao.EquipoDAO;
 import starter.model.Equipo;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -19,9 +22,17 @@ import java.util.Map;
 
 /**
  * Controlador completo para la vista de gestión de equipos con control de
- * columnas.
+ * columnas y formulario integrado.
  */
 public class EquiposController {
+
+    // Contenedor principal
+    @FXML
+    private VBox mainContainer;
+
+    // Contenedor de la tabla (la vista completa actual)
+    @FXML
+    private VBox tableContainer;
 
     // Tabla y columnas
     @FXML
@@ -90,6 +101,10 @@ public class EquiposController {
     private Map<String, Boolean> columnVisibility;
     private Popup columnMenuPopup;
 
+    // Control del formulario
+    private Parent formView;
+    private EquipoFormController formController;
+
     public EquiposController() {
         this.equipoDAO = new EquipoDAO();
         this.equiposData = FXCollections.observableArrayList();
@@ -127,7 +142,10 @@ public class EquiposController {
         columnMap.put("Referencia/Manual", referenciaPartesColumn);
 
         // Definir columnas visibles inicialmente
-        String[] initiallyVisibleColumns = {"Nombre", "Marca", "Modelo", "Proveedor", "Fecha de Compra", "Estado"};
+        String[] initiallyVisibleColumns = {
+            "ID", "Tipo de Equipo", "Nombre", "Marca", "Modelo", 
+            "Proveedor", "Fecha de Compra", "Estado"
+        };
 
         // Inicializar visibilidad
         columnMap.forEach((name, column) -> {
@@ -176,35 +194,29 @@ public class EquiposController {
      * Crea el contenido del menú de columnas.
      */
     private VBox createColumnMenu() {
-        VBox menu = new VBox(4); // Spacing reducido
-        menu.setPadding(new Insets(8)); // Padding reducido
+        VBox menu = new VBox(4);
+        menu.setPadding(new Insets(8));
         menu.getStyleClass().addAll("column-menu", "elevation-2");
         menu.setMinWidth(200);
 
-        // Título del menú
         Label title = new Label("Mostrar/Ocultar Columnas");
         title.getStyleClass().add("column-menu-title");
         menu.getChildren().add(title);
 
-        // Separador
         Separator separator = new Separator();
         separator.getStyleClass().add("column-menu-separator");
         menu.getChildren().add(separator);
 
-        // Crear checkboxes para cada columna con área clickeable completa
         columnMap.forEach((columnName, column) -> {
             CheckBox checkBox = new CheckBox(columnName);
             checkBox.setSelected(columnVisibility.get(columnName));
             checkBox.getStyleClass().add("column-menu-checkbox");
-
-            // IMPORTANTE: Hacer que el checkbox ocupe toda la anchura
             checkBox.setMaxWidth(Double.MAX_VALUE);
             checkBox.setPrefWidth(200);
 
-            // Deshabilitar columnas esenciales
-            if ("ID".equals(columnName) || "Nombre".equals(columnName) || "Tipo de Equipo".equals(columnName)) {
+            // Update locked columns logic
+            if ("ID".equals(columnName) || "Nombre".equals(columnName)) {
                 checkBox.setDisable(true);
-                checkBox.setSelected(true);
             }
 
             checkBox.setOnAction(e -> {
@@ -217,12 +229,10 @@ public class EquiposController {
             menu.getChildren().add(checkBox);
         });
 
-        // Separador para botones de acción
         Separator actionSeparator = new Separator();
         actionSeparator.getStyleClass().add("column-menu-separator");
         menu.getChildren().add(actionSeparator);
 
-        // Botón mostrar todas - más compacto
         Button showAllBtn = new Button("Mostrar Todas");
         showAllBtn.getStyleClass().addAll("column-menu-button", "success");
         showAllBtn.setMaxWidth(Double.MAX_VALUE);
@@ -231,7 +241,6 @@ public class EquiposController {
             columnMenuPopup.hide();
         });
 
-        // Botón mostrar solo básicas - más compacto
         Button showBasicBtn = new Button("Solo Básicas");
         showBasicBtn.getStyleClass().addAll("column-menu-button", "secondary");
         showBasicBtn.setMaxWidth(Double.MAX_VALUE);
@@ -251,7 +260,6 @@ public class EquiposController {
     private void toggleColumnVisibility(TableColumn<Equipo, ?> column, boolean visible) {
         if (visible) {
             if (!equiposTable.getColumns().contains(column)) {
-                // Encontrar la posición correcta para insertar la columna
                 insertColumnInCorrectPosition(column);
             }
         } else {
@@ -266,7 +274,6 @@ public class EquiposController {
         var allColumns = columnMap.values().toArray(new TableColumn[0]);
         var visibleColumns = equiposTable.getColumns();
 
-        // Encontrar el índice correcto
         int targetIndex = 0;
         for (TableColumn<Equipo, ?> col : allColumns) {
             if (col == columnToInsert) {
@@ -277,7 +284,6 @@ public class EquiposController {
             }
         }
 
-        // Insertar en la posición correcta
         if (targetIndex >= visibleColumns.size()) {
             visibleColumns.add(columnToInsert);
         } else {
@@ -304,10 +310,8 @@ public class EquiposController {
     private void showBasicColumns() {
         String[] basicColumns = {"Nombre", "Marca", "Modelo", "Proveedor", "Fecha de Compra", "Estado"};
 
-        // Ocultar todas primero
         equiposTable.getColumns().clear();
 
-        // Mostrar solo las básicas en el orden correcto
         for (String columnName : basicColumns) {
             TableColumn<Equipo, ?> column = columnMap.get(columnName);
             if (column != null) {
@@ -316,7 +320,6 @@ public class EquiposController {
             }
         }
 
-        // Marcar el resto como ocultas
         columnMap.forEach((name, column) -> {
             if (!java.util.Arrays.asList(basicColumns).contains(name)) {
                 columnVisibility.put(name, false);
@@ -342,28 +345,20 @@ public class EquiposController {
      * propiedades del modelo.
      */
     private void setupTableColumns() {
-        // Columnas principales
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipoEquipoColumn.setCellValueFactory(new PropertyValueFactory<>("tipoEquipo"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
         modeloColumn.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-
-        // Información de identificación
         serialColumn.setCellValueFactory(new PropertyValueFactory<>("serie"));
         codigoInternoColumn.setCellValueFactory(new PropertyValueFactory<>("codigoInterno"));
-
-        // Información técnica
         interfazColumn.setCellValueFactory(new PropertyValueFactory<>("interfaz"));
-
-        // Información de ubicación y gestión
         ubicacionColumn.setCellValueFactory(new PropertyValueFactory<>("ubicacion"));
         proveedorColumn.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
         fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaCompra"));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
         referenciaPartesColumn.setCellValueFactory(new PropertyValueFactory<>("referenciaPartes"));
 
-        // Formateo personalizado
         setupCustomCellFormatting();
     }
 
@@ -371,7 +366,6 @@ public class EquiposController {
      * Configura formato personalizado para ciertas columnas.
      */
     private void setupCustomCellFormatting() {
-        // Columna ID - centrar
         idColumn.setCellFactory(column -> {
             return new TableCell<Equipo, Integer>() {
                 @Override
@@ -387,7 +381,6 @@ public class EquiposController {
             };
         });
 
-        // Columna de fecha - formatear y centrar
         fechaColumn.setCellFactory(column -> {
             return new TableCell<Equipo, LocalDate>() {
                 private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -406,7 +399,6 @@ public class EquiposController {
             };
         });
 
-        // Columna de estado - aplicar estilos según el valor
         estadoColumn.setCellFactory(column -> {
             return new TableCell<Equipo, String>() {
                 @Override
@@ -436,7 +428,6 @@ public class EquiposController {
             };
         });
 
-        // Columna de tipo de equipo - aplicar estilo
         tipoEquipoColumn.setCellFactory(column -> {
             return new TableCell<Equipo, String>() {
                 @Override
@@ -452,7 +443,6 @@ public class EquiposController {
             };
         });
 
-        // Columna de interfaces - ajustar texto largo
         interfazColumn.setCellFactory(column -> {
             return new TableCell<Equipo, String>() {
                 @Override
@@ -474,7 +464,6 @@ public class EquiposController {
             };
         });
 
-        // Similar para referencia de partes
         referenciaPartesColumn.setCellFactory(column -> {
             return new TableCell<Equipo, String>() {
                 @Override
@@ -518,9 +507,6 @@ public class EquiposController {
 
         equiposTable.setPlaceholder(new Label("No hay equipos registrados"));
 
-        // Cambiar a CONSTRAINED_RESIZE_POLICY para distribuir columnas automáticamente
-        equiposTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
         updateColumnInfo();
     }
 
@@ -528,13 +514,10 @@ public class EquiposController {
      * Configura los event handlers de todos los botones.
      */
     private void setupButtons() {
-        // Botones principales
         agregarBtn.setOnAction(e -> handleAgregarEquipo());
         editarBtn.setOnAction(e -> handleEditarEquipo());
         eliminarBtn.setOnAction(e -> handleEliminarEquipo());
         verDetalleBtn.setOnAction(e -> handleVerDetalle());
-
-        // Botones adicionales
         refreshBtn.setOnAction(e -> handleRefresh());
         exportBtn.setOnAction(e -> handleExport());
     }
@@ -588,11 +571,7 @@ public class EquiposController {
     // ====================================================================
     @FXML
     private void handleAgregarEquipo() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Agregar Equipo");
-        alert.setHeaderText("Nueva funcionalidad");
-        alert.setContentText("El formulario para agregar equipos será implementado próximamente.");
-        alert.showAndWait();
+        mostrarFormulario(null);
     }
 
     @FXML
@@ -600,13 +579,7 @@ public class EquiposController {
         Equipo equipoSeleccionado = equiposTable.getSelectionModel().getSelectedItem();
 
         if (equipoSeleccionado != null) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Editar Equipo");
-            alert.setHeaderText("Información del equipo seleccionado:");
-            alert.setContentText(buildEquipoDetailText(equipoSeleccionado));
-            alert.getDialogPane().setPrefWidth(500);
-            alert.getDialogPane().setPrefHeight(400);
-            alert.showAndWait();
+            mostrarFormulario(equipoSeleccionado);
         }
     }
 
@@ -686,6 +659,75 @@ public class EquiposController {
                 + "• PDF\n"
                 + "• CSV");
         alert.showAndWait();
+    }
+
+    // ====================================================================
+    // GESTIÓN DEL FORMULARIO
+    // ====================================================================
+
+    /**
+     * Muestra el formulario de agregar/editar equipo.
+     * @param equipo El equipo a editar, o null para agregar uno nuevo
+     */
+    private void mostrarFormulario(Equipo equipo) {
+        try {
+            // Cargar el formulario si no está cargado
+            if (formView == null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EquipoFormView.fxml"));
+                formView = loader.load();
+                formController = loader.getController();
+
+                // Configurar callbacks
+                formController.setOnSaveCallback(equipoGuardado -> {
+                    loadEquipos();
+                    updateStatusLabels();
+                    mostrarTabla();
+                });
+
+                formController.setOnCancelCallback(this::mostrarTabla);
+            }
+
+            // Configurar el formulario según el modo
+            if (equipo == null) {
+                formController.setModoAgregar();
+            } else {
+                formController.setEquipoParaEditar(equipo);
+            }
+
+            // Ocultar tabla y mostrar formulario
+            tableContainer.setVisible(false);
+            tableContainer.setManaged(false);
+
+            // Agregar formulario si no está ya agregado
+            if (!mainContainer.getChildren().contains(formView)) {
+                mainContainer.getChildren().add(formView);
+            }
+            formView.setVisible(true);
+            ((VBox) formView).setManaged(true);
+
+        } catch (IOException e) {
+            System.err.println("Error cargando el formulario: " + e.getMessage());
+            e.printStackTrace();
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("No se pudo cargar el formulario");
+            errorAlert.setContentText("Error: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
+    /**
+     * Oculta el formulario y muestra la tabla.
+     */
+    private void mostrarTabla() {
+        if (formView != null) {
+            formView.setVisible(false);
+            ((VBox) formView).setManaged(false);
+        }
+
+        tableContainer.setVisible(true);
+        tableContainer.setManaged(true);
     }
 
     // ====================================================================

@@ -1,0 +1,277 @@
+/* ====================================================================
+   ESTILOS PARA FORMULARIOS DE EQUIPOS - CON ATLANTAFX
+   ==================================================================== */
+
+/* Contenedor del formulario */
+.form-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 10px 0 0; /* Espacio adicional a la derecha */
+}
+
+.form-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.form-content {
+    -fx-background-color: -color-bg-default;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 20px 10px 10px; /* Más padding a la derecha */
+}
+
+/* Secciones del formulario - con animación de entrada */
+.form-section {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 2);
+}
+
+.form-section:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 6, 0, 0, 3);
+    -fx-translate-y: -1px;
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.section-icon {
+    -fx-icon-color: -color-accent-emphasis;
+}
+
+/* Inputs del formulario - con efectos mejorados */
+.form-input {
+    -fx-pref-height: 36px;
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 12px;
+}
+
+.form-input:hover {
+    -fx-border-color: -color-accent-muted;
+    -fx-background-color: -color-bg-inset;
+}
+
+.form-input:focused {
+    -fx-border-color: -color-accent-emphasis;
+    -fx-border-width: 2px;
+    -fx-background-color: -color-bg-default;
+    -fx-effect: dropshadow(gaussian, -color-accent-emphasis, 4, 0.3, 0, 0);
+}
+
+/* Labels del formulario */
+.form-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -color-fg-default;
+    -fx-padding: 0 0 4px 0;
+}
+
+.required-asterisk {
+    -fx-text-fill: -color-danger-emphasis;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.hint-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-style: italic;
+}
+
+/* Grid del formulario */
+.form-grid {
+    -fx-hgap: 15px;
+    -fx-vgap: 12px;
+}
+
+/* Preview de imagen - con efecto hover */
+.image-preview-container {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 2px;
+    -fx-border-style: dashed;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-alignment: center;
+}
+
+.image-preview-container:hover {
+    -fx-border-color: -color-accent-muted;
+    -fx-background-color: -color-bg-inset;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 6, 0, 0, 2);
+}
+
+.no-image-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-style: italic;
+}
+
+/* Botones de acción del formulario - CURSOR HAND */
+.form-actions {
+    -fx-padding: 15px 0 0 0;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px 0 0 0;
+}
+
+/* CURSOR HAND PARA TODOS LOS BOTONES */
+.form-section .button,
+.form-actions .button,
+.button {
+    -fx-cursor: hand;
+}
+
+/* Efectos hover para botones */
+.button:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Botón flat (sin borde) - para el botón de volver */
+.button.flat {
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+}
+
+.button.flat:hover {
+    -fx-background-color: -color-bg-subtle;
+}
+
+.button.flat:pressed {
+    -fx-background-color: -color-bg-inset;
+}
+
+/* Botones outlined mejorados */
+.button.outlined {
+    -fx-border-width: 1.5px;
+    -fx-cursor: hand;
+}
+
+.button.outlined:hover {
+    -fx-background-color: -color-bg-subtle;
+}
+
+/* Botón accent con animación */
+.button.accent {
+    -fx-cursor: hand;
+}
+
+.button.accent:hover {
+    -fx-effect: dropshadow(gaussian, -color-accent-emphasis, 8, 0.4, 0, 2);
+}
+
+/* TextArea */
+.form-input.text-area {
+    -fx-pref-height: 100px;
+}
+
+.form-input.text-area .content {
+    -fx-background-color: transparent;
+}
+
+/* ComboBox con efectos */
+.form-input.combo-box {
+    -fx-background-color: -color-bg-default;
+    -fx-cursor: hand;
+}
+
+.form-input.combo-box:hover {
+    -fx-border-color: -color-accent-muted;
+}
+
+.form-input.combo-box .list-cell {
+    -fx-background-color: transparent;
+}
+
+.form-input.combo-box .list-cell:hover {
+    -fx-background-color: -color-bg-subtle;
+    -fx-cursor: hand;
+}
+
+/* DatePicker con efectos */
+.form-input.date-picker {
+    -fx-background-color: -color-bg-default;
+}
+
+.form-input.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.form-input.date-picker .arrow-button {
+    -fx-cursor: hand;
+}
+
+.form-input.date-picker .arrow-button:hover {
+    -fx-background-color: -color-bg-subtle;
+}
+
+/* Separadores en el formulario */
+.form-section .separator {
+    -fx-padding: 8px 0;
+}
+
+/* Responsive para columnas del grid */
+@media (max-width: 1200px) {
+    .form-grid {
+        -fx-hgap: 10px;
+        -fx-vgap: 10px;
+    }
+}
+
+/* Estados disabled */
+.form-input:disabled {
+    -fx-opacity: 0.6;
+    -fx-background-color: -color-bg-subtle;
+    -fx-cursor: not-allowed;
+}
+
+/* Animación para labels requeridos */
+.required-asterisk {
+    -fx-effect: dropshadow(gaussian, -color-danger-emphasis, 2, 0.5, 0, 0);
+}
+
+/* Header section con mejor separación */
+.header-section {
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Hover effects para TextField */
+.text-field:hover {
+    -fx-cursor: text;
+}
+
+/* Hover effects para TextArea */
+.text-area:hover {
+    -fx-cursor: text;
+}
+
+/* ScrollBar estilizada */
+.form-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+}
+
+.form-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: -color-border-default;
+    -fx-background-radius: 5px;
+}
+
+.form-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -color-accent-muted;
+}
